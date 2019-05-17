@@ -8,12 +8,35 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>Bulletin Board</title>
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/reset.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
 </head>
-<body>
+<body id="app">
+    <div id="wrapper">
+        <div class="container">
+            <header class="clearFix">
+               <div class="header_left">
+                    <ul class="clearFix">
+                        <li><h2>SCM Bullletin Board</h2></li>
+                        <li><a href="">Users</a></li>
+                        <li><a href="">Posts</a></li>
+                    </ul>
+                </div><!-- /.header_left -->
+                <div class="header_right">
+                    <ul>
+                        <li><a href="">Log out</a></li>
+                    </ul>
+                </div><!-- /.header_right -->
+            </header>
+            <div class="content">
+                @yield('content')
+            </div><!-- /.content -->
+        </div><!-- /.container -->
+    </div><!-- /.wrapper -->
+
 
 
     <!-- Scripts -->

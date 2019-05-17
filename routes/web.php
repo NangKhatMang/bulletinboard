@@ -12,5 +12,14 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('User.login');
+});
+Route::get('/addPost', function () {
+    return view('Post.create');
+});
+Route::get('/confirmPost', function () {
+    return view('Post.createConfirm');
+});
+Route::get('/edit', function () {
+    return view('Post.edit');
 });
