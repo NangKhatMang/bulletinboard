@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('User.login');
+    return view('Auth.login');
 });
 Route::get('/addPost', function () {
     return view('Post.create');
