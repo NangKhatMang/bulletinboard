@@ -23,3 +23,6 @@ Route::get('/confirmPost', function () {
 Route::get('/edit', function () {
     return view('Post.edit');
 });
+Route::get('/postList', function () {
+    return view('Post.postList');
+});

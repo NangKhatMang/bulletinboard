@@ -101,3 +101,21 @@ form .formgroup>label:last-child {
     padding: 0;
 
 }
+#postList form {
+    float: left;
+    margin-right: 20px;
+    width: 288px;
+}
+#postList form input{
+    padding: 10px 0px;
+    margin-right: 10px;
+}
+#postList a {
+    float: left;
+    padding: 10px 20px;
+    margin-right: 20px;
+    border: 1px solid #000;
+    background-color: #4e79f3;
+    color: #fff;
+    text-decoration: none;
+}
