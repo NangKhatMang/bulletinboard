@@ -11,9 +11,8 @@
         </div>
         <div class="confirm_formgroup clearFix">
             <button type="submit">Add</button>
-            <button class="cancel">Cancel</button>
+            <a href="/addPost" class="cancel">Cancel</a>
         </div><!-- /.formgroup -->
-
     </form>
 </div><!-- /.confirmPost -->
 @endsection

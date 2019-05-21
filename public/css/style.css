@@ -94,6 +94,13 @@ form .formgroup>label:last-child {
     background-color: #fff;
     color: #000;
 }
+#confirmPost form a {
+    display: block;
+    width: 100px;
+    border: 1px solid #000;
+    padding: 10px 0;
+    text-decoration: none;
+}
 /* create confirm */
 
 .formgroup input["checkbox"] {
@@ -101,21 +108,47 @@ form .formgroup>label:last-child {
     padding: 0;
 
 }
-#postList form {
-    float: left;
-    margin-right: 20px;
-    width: 288px;
+#postList .btnList form {
+    width: 660px;
+    margin: 0 auto 30px;
 }
-#postList form input{
-    padding: 10px 0px;
+#postList .btnList input{
+    padding: 9px 0px;
     margin-right: 10px;
 }
-#postList a {
-    float: left;
-    padding: 10px 20px;
+#postList .btnList form button {
+    margin-right: 20px;
+}
+#postList .btnList {
+    margin: 0px auto;
+}
+#postList .btnList a {
+    padding: 9px 22px;
     margin-right: 20px;
     border: 1px solid #000;
     background-color: #4e79f3;
     color: #fff;
     text-decoration: none;
 }
+#postList table {
+    margin: 0 auto;
+    border: 1px solid #000;
+    text-align: center;
+}
+#postList table th, #postList table td {
+    padding: 5px;
+    border: 1px solid #000;
+}
+#postList table .th01, #postList table .th03, #postList table .th04 {
+    width: 130px;
+}
+#postList table .th02 {
+    width: 200px;
+}
+#postList table .action {
+    width: 70px;
+}
+#postList table tr td:nth-child(3) {
+    text-align: left;
+}
+/* post list */
