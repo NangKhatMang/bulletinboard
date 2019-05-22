@@ -1,18 +1,23 @@
 @extends('layouts.app')
 
 @section('content')
-<div id="confirmPost">
-    <form action="/createPost">
-        <div class="formgroup clearFix">
-            <label>Title</label><label>Post1</label>
+<div id="postConfirm">
+
+    <form action="/postList" method="GET">
+        <div class="form-group row">
+            <label class="col-md-2">Title</label>
+            <label class="col-md-4 border border-dark">Post1</label>
         </div>
-        <div class="formgroup clearFix">
-            <label>Description</label><label>Description</label>
+        <div class="form-group row">
+            <label class="col-md-2">Description</label>
+            <label class="col-md-4 border border-dark">Description</label>
         </div>
-        <div class="confirm_formgroup clearFix">
-            <button type="submit">Add</button>
-            <a href="/addPost" class="cancel">Cancel</a>
-        </div><!-- /.formgroup -->
+        <div class="form-group row">
+            <div class="col-md-6 row">
+                <button type="submit" class="btn btn-primary  mr-4 ml-auto">Add</button>
+                <a href="/postAdd" class="btn btn-white mr-auto">Cancel</a>
+            </div>
+        </div>
     </form>
-</div><!-- /.confirmPost -->
+</div><!-- /#postConfirm -->
 @endsection

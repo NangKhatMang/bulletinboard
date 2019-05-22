@@ -14,15 +14,21 @@
 Route::get('/', function () {
     return view('Auth.login');
 });
-Route::get('/addPost', function () {
+Route::get('/postAdd', function () {
     return view('Post.create');
 });
-Route::get('/confirmPost', function () {
+Route::get('/postConfirm', function () {
     return view('Post.createConfirm');
 });
-Route::get('/edit', function () {
+Route::get('/postEdit', function () {
     return view('Post.edit');
 });
 Route::get('/postList', function () {
     return view('Post.postList');
+});
+Route::get('/postEditConfirm', function () {
+    return view('Post.editConfirm');
+});
+Route::get('/upload', function () {
+    return view('Post.upload');
 });

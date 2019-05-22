@@ -11,26 +11,35 @@
     <title>Bulletin Board</title>
 
     <!-- Styles -->
-    <link href="{{ asset('css/reset.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body id="app">
     <div id="wrapper">
         <div class="container">
-            <header class="clearFix">
-               <div class="header_left">
-                    <ul class="clearFix">
-                        <li><h2>SCM Bullletin Board</h2></li>
-                        <li><a href="">Users</a></li>
-                        <li><a href="">Posts</a></li>
+            <nav class="navbar navbar-expand-lg nav-dark bg-light">
+               <a href="#" class=" navbar-brand" >SCM Bullletin Board</a>
+               
+                    <!-- nav left -->
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a href="/userList" class="nav-link">Users</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/postList" class="nav-link">Posts</a>
+                        </li>
                     </ul>
-                </div><!-- /.header_left -->
-                <div class="header_right">
-                    <ul>
-                        <li><a href="">Log out</a></li>
+                    <!-- nav right -->
+                    
+                    <ul class="navbar-nav">
+                        <li class="nav-item"><a href="#" class="nav-link">User Name</a></li>
+                        <li class="nav-item">
+                            <a href="/logout" class="nav-link">Log out</a>
+                        </li>
                     </ul>
-                </div><!-- /.header_right -->
-            </header>
+                  
+                
+                
+            </nav>
             <div class="content">
                 @yield('content')
             </div><!-- /.content -->

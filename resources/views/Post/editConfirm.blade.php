@@ -1,16 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-<div id="postEdit">
+<div id="postEditConfirm">
 
-    <form action="/postEditConfirm" method="GET">
+    <form action="/postList" method="GET">
         <div class="form-group row">
             <label for="title" class="col-md-2">Title</label>
-            <input type="text" id="title" name="title" class="form-control col-md-4" value="Post 1">
+            <label class="col-md-4 border border-dark">Post1</label>
         </div>
         <div class="form-group row">
             <label for="desc" class="col-md-2">Description</label>
-            <textarea name="desc" id="desc" class="form-control col-md-4">Description for Post 1</textarea>
+            <label class="col-md-4 border border-dark">Update description for Post 1</label>
         </div>
         <div class="form-group row">
             <label for="status" class="col-md-2 form-check-label">Status</label>
@@ -18,10 +18,11 @@
         </div>
         <div class="form-group row">
             <div class="col-md-6 row">
-                <button type="submit" class="btn btn-primary  mr-4 ml-auto">Confirm</button>
-                <button type="reset" class="btn btn-white  mr-auto">Clear</button>
+                <button type="submit" class="btn btn-primary  mr-4 ml-auto">Update</button>
+                <a href="/postEdit" class="btn btn-white mr-auto">Cancel</a>
             </div>
         </div>
     </form>
-</div><!-- /.addPost -->
+</div><!-- /#postConfirm -->
 @endsection
+"
