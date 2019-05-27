@@ -14,6 +14,8 @@
 Route::get('/', function () {
     return view('Auth.login');
 });
+
+/* post */
 Route::get('/postAdd', function () {
     return view('Post.create');
 });
@@ -31,4 +33,28 @@ Route::get('/postEditConfirm', function () {
 });
 Route::get('/upload', function () {
     return view('Post.upload');
+});
+
+/* user */
+Route::get('/userList', function () {
+    return view('User.userList');
+});
+Route::get('/userAdd', function () {
+    return view('User.create');
+});
+Route::get('/userConfirm', function () {
+    return view('User.createConfirm');
+});
+Route::get('/userEdit', function () {
+    return view('User.edit');
+});
+Route::get('/userEditConfirm', function () {
+    return view('User.editConfirm');
+});
+
+Route::get('/changePassword', function () {
+    return view('User.changePassword');
+});
+Route::get('/userProfile', function () {
+    return view('User.userProfile');
 });

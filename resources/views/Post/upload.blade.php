@@ -1,13 +1,24 @@
-@extends('layouts.app')
+@extends('layouts.layout')
 
 @section('content')
 <div id="postAdd">
-    <h2>Upload file form</h2>
-    <form action="/postList" method="GET" class="border border-dark">
-        <div class="form-group mt-4 ml-4">
-            <input type="file" class="form-control-file">
+    <div class="row mb-3">
+        <div class="col-md-1"></div>
+        <div class="col">
+            <h3>Upload</h3>
         </div>
-        <button type="submit" class="btn btn-primary ml-4 mb-4">Import File</button>
-    </form>
+    </div>
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-md-8 ">
+            <form action="/postList" method="GET" class="border border-dark p-5">
+                <div class="form-group">
+                    <input type="file" class="form-control-file">
+                </div>
+                <button type="submit" class="btn btn-primary mt-2">Import File</button>
+            </form>
+        </div>
+        <div class="col"></div>
+    </div>
 </div><!-- /#postAdd -->
 @endsection
