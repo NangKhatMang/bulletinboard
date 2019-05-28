@@ -15,6 +15,9 @@ Route::get('/', function () {
     return view('Auth.login');
 });
 
+Route::post('/user/login', 'User\UserController@login');
+Route::get('/user/logout','User\UserController@logout');
+
 /* post */
 Route::get('/postAdd', function () {
     return view('Post.create');

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Contracts\Services\User;
+namespace App\Contracts\Dao\User;
 
-interface UserServiceInterface
+interface UserDaoInterface
 {
   //get user list
   public function getUserList();

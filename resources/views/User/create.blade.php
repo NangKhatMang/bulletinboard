@@ -9,8 +9,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col"></div>
-        <div class="col-md-8 ">
+        <div class="col-md-8 mx-auto">
             <form action="/userConfirm" method="GET">
                 <div class="form-group row">
                     <label for="title" class="col-md-4">Name</label>
@@ -56,8 +55,6 @@
                 </div>
             </form>
         </div>
-        <div class="col"></div>
     </div>
-        
 </div><!-- /#postAdd -->
 @endsection

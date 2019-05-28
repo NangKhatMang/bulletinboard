@@ -20,8 +20,8 @@ class CreatePostsTable extends Migration
             $table->integer('status')->default(1);
             $table->integer('create_user_id')->unsigned();
             $table->integer('updated_user_id')->unsigned();
-            $table->integer('deleted_user_id');
-            $table->datetime('deleted_at');
+            $table->integer('deleted_user_id')->nullable();
+            $table->datetime('deleted_at')->nullable();
             $table->timestamps();
 
             $table->foreign('create_user_id')->references('id')->on('users');

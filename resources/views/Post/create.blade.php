@@ -9,8 +9,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col"></div>
-        <div class="col-md-8 ">
+        <div class="col-md-8 mx-auto">
             <form action="/postConfirm" method="GET">
                 <div class="form-group">
                     <label for="title">Title</label>
@@ -28,8 +27,6 @@
                 </div>
             </form>
         </div>
-        <div class="col"></div>
     </div>
-        
 </div><!-- /#postAdd -->
 @endsection

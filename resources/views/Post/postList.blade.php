@@ -9,17 +9,18 @@
         </div>
     </div>
     <div class="row justify-content-center">
-        <form action="/search" method="GET" class="form-inline ">
-            <input type="text" class="form-control mb-4 mr-3"> 
-            <button type="submit" class="btn btn-primary mb-4 mr-3">Search</button>
+        <form action="/search" method="GET" class="form-inline">
+            <div class="form-group mb-2">
+                <input type="text" class="form-control mb-4 mr-3" placeholder="Search...">
+                <button type="submit" class="btn btn-primary mb-4 mr-3">Search</button>
+                <a href="/postAdd" class="btn btn-primary mb-4 mr-3">Add</a>
+                <a href="/upload" class="btn btn-primary mb-4 mr-3">Upload</a>
+                <a href="/download" class="btn btn-primary mb-4 mr-3">Download</a>
+            </div>
         </form>
-        <a href="/postAdd" class="btn btn-primary mb-4 mr-3">Add</a>
-        <a href="/upload" class="btn btn-primary mb-4 mr-3">Upload</a>
-        <a href="/download" class="btn btn-primary mb-4 mr-3">Download</a>
     </div>
-
     <div class="row">
-        <table class="table table-striped table-bordered text-center col-md-9 mx-auto">
+        <table class="table table-responsive-md table-striped table-bordered text-center col-md-9 mx-auto">
             <thead class="thead-dark">
                 <th class="th01">Post Title</th>
                 <th class="th02">Post Description</th>
@@ -70,28 +71,25 @@
                 </tr>
             </tbody>
         </table>
-        
-            <ul class="pagination col-md-12 justify-content-center">
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">4</a></li>
-                <li class="page-item"><a class="page-link" href="#">5</a></li>
-                <li class="page-item"><a class="page-link" href="#">6</a></li>
-                <li class="page-item"><a class="page-link" href="#">7</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        
-        
+        <ul class="pagination col-md-12 justify-content-center">
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">4</a></li>
+            <li class="page-item"><a class="page-link" href="#">5</a></li>
+            <li class="page-item"><a class="page-link" href="#">6</a></li>
+            <li class="page-item"><a class="page-link" href="#">7</a></li>
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
     </div>
 </div><!-- /#postList -->
 @endsection
