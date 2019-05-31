@@ -22,31 +22,33 @@
                         <i class="fas fa-bars"></i>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <!-- nav left -->
-                        <ul class="navbar-nav mr-auto">
                         @if(Auth::check())
-                        @if(Auth::user()->type == '0')
-                            <li class="nav-item">
-                                <a class="nav-link" href="/userList">Users</a>
-                            </li>
+                            <!-- nav left -->
+                            <ul class="navbar-nav mr-auto">
+                                @if(Auth::user()->type == '0')
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/users">Users</a>
+                                    </li>
+                                @endif
+                                @if(Auth::user()->type == '1')
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/userProfile">Profile</a>
+                                    </li>
+                                @endif
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/posts">Posts</a>
+                                </li>
+                            </ul><!-- /.nav left -->
+                            <!-- nav right -->
+                            <ul class="navbar-nav ">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">{{Auth::user()->name}}</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/user/logout">Logout</a>
+                                </li>
+                            </ul><!-- /.nav right -->
                         @endif
-                            <li class="nav-item">
-                                <a class="nav-link" href="/postList">Posts</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/userProfile">Profile</a>
-                            </li>
-                        @endif
-                        </ul>
-                        <!-- nav right -->
-                        <ul class="navbar-nav ">
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">@if(session('login_name')){{session('login_name')}}@endif</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/user/logout">Logout</a>
-                            </li>
-                        </ul>
                     </div>
                 </div><!-- /.container -->
             </nav>

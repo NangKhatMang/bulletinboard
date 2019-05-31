@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Contracts\Services\User\UserServiceInterface;
 use App\Services\User\UserService;
 use App\Http\Controllers\Redirect;
+use App\Models\User;
 use Log;
 use Validator;
 use Input;
@@ -19,6 +20,12 @@ class UserController extends Controller
     public function __construct(UserServiceInterface $user)
     {
         $this->userService = $user;
+    }
+
+    public function showRegisterForm()
+    {
+        //session()->forget('pwd-not-match');
+        return view('User.create');
     }
 
      /**
@@ -41,14 +48,11 @@ class UserController extends Controller
                         ->withErrors($validator)
                         ->withInput();
         }
-        $row = $this->userService->login($email, $pwd);
-        if ($row) {
-            session(['login_name' => $row->name]);
-            $authority = $row->type;
-            return view('Post.postList', compact('authority'));
+        if (Auth::guard('')->attempt(['email' => $email, 'password' => $pwd])) {
+            return redirect()->intended('/post/user');
         } else {
             return redirect()->back()
-                ->withErrors(['error' => "Email and password incorrect!"]);
+                ->withErrors(['incorrect' => "Email and password incorrect!"]);
             //    ->withinput(Input::all());
         }
     }
@@ -63,7 +67,6 @@ class UserController extends Controller
     public function logout()
     {
         Auth::logout();
-        session()->forget('login_name');
         return redirect('/');
     }
 
@@ -74,7 +77,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $users = $this->userService->getUser();
+        return view('User.userList', compact('users'));
     }
 
     /**
@@ -82,9 +86,40 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        session()->forget('pwd-not-match');
+        $validator = Validator::make($request->all(), [
+            'username'  =>  'required',
+            'email'     =>  'required|email|unique:users,email',
+            'password'  =>  'required|min:8|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/',
+            'password_confirmation' => 'required|min:8|regex:/^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/',
+            'phone'     =>  'required',
+            'profile'   =>  'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+        $name    =  $request->username;
+        $email   =  $request->email;
+        $pwd     =  $request->password;
+        $type    =  $request->type;
+        $phone   =  $request->phone;
+        $dob     =  $request->dob;
+        $address =  $request->address;
+        $profile =  $request->profile;
+        //password show as ***
+        $hide = "*";
+        $pwdHide = str_pad($hide, strlen($pwd), "*");
+        //tempory save profile photo
+        $tempProfile = time().'.'.request()->profile->getClientOriginalExtension();
+        request()->profile->move(public_path('img/tempProfile'), $tempProfile);
+        $tempProfilePath = '/img/tempProfile/'.$tempProfile;
+
+        return view('User.createConfirm', compact(
+            'name', 'email','pwd', 'type', 'phone', 'dob', 'address', 'profile', 'pwdHide', 'tempProfile', 'tempProfilePath'));
     }
 
     /**
@@ -95,7 +130,19 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $userId =   Auth::user()->id;
+        $user = new User;
+        $user->name    =  $request->username;
+        $user->email   =  $request->email;
+        $user->pwd     =  $request->password;
+        $user->type    =  $request->type;
+        $user->phone   =  $request->phone;
+        $user->dob     =  $request->dob;
+        $user->address =  $request->address;
+        $user->profile =  $request->profile;
+        $insertCommand =  $this->userService->store($userId, $user);
+        return redirect()->intended('users');
+
     }
 
     /**

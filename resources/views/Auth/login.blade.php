@@ -32,10 +32,10 @@
                     <input type="checkbox" id="check" class="form-check-input">
                 </div>
             </div>
-            @if ($errors->has('error'))
+            @if ($errors->has('incorrect'))
                 <div class="form-group row">
                     <label class="col text-center text-danger">
-                        {{ $errors -> first('error') }} 
+                        {{ $errors -> first('incorrect') }} 
                     </label>
                 </div>
             @endif

@@ -15,17 +15,22 @@ class CreatePostsTable extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title')->unique();
+            //$table->string('title')->unique();
+            $table->string('title');
             $table->string('description');
             $table->integer('status')->default(1);
-            $table->integer('create_user_id')->unsigned();
-            $table->integer('updated_user_id')->unsigned();
-            $table->integer('deleted_user_id')->nullable();
-            $table->datetime('deleted_at')->nullable();
-            $table->timestamps();
+            // $table->integer('create_user_id')->unsigned();
+            // $table->integer('updated_user_id')->unsigned();
+            $table->integer('create_user_id');
+            $table->integer('updated_user_id');
 
-            $table->foreign('create_user_id')->references('id')->on('users');
-            $table->foreign('updated_user_id')->references('id')->on('users');
+            $table->integer('deleted_user_id')->nullable();
+            $table->datetime('created_at')->useCurrent();
+            $table->datetime('updated_at')->useCurrent();
+            $table->datetime('deleted_at')->nullable();
+
+            // $table->foreign('create_user_id')->references('id')->on('users');
+            // $table->foreign('updated_user_id')->references('id')->on('users');
         });
     }
 

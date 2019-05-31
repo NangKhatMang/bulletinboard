@@ -10,30 +10,13 @@ use Log;
 class UserDao implements UserDaoInterface
 {
   /**
-     * Get User List
-     *
-     * Get customer list by email and password
-     * @param [string] $email
-     * @param [string] $pass
-     * @return customer list
-     */
-    public function login($email, $pwd)
-    {
-        $row = User::where('email', $email)->first();
-        if ($row) {
-            if (Hash::check($pwd, $row->password)) {
-                return $row;
-            }
-        }
-    }
-
-  /**
-   * Get Operator List
+   * Get Users List
    * @param Object
-   * @return $operatorList
+   * @return $users
    */
-  public function getUserList()
+  public function getUser()
   {
-    return User::get();
+      $users = User::paginate(50);
+      return $users;
   }
 }

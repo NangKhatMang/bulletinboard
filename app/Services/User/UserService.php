@@ -20,22 +20,22 @@ class UserService implements UserServiceInterface
   }
 
   /**
-   * Get User List
+   * Get Users List
    * @param Object
-   * @return $userList
+   * @return $users
    */
-  public function getUserList()
+  public function getUser()
   {
-    return $this->userDao->getUserList();
+    return $this->userDao->getUser();
   }
 
-  public function login($email, $pwd)
+  /**
+   * Create User
+   * @param Object
+   * @return $users
+   */
+  public function store($userId, $post)
   {
-    $row = $this->userDao->login($email, $pwd);
-    if ($row == null) {
-        return false;
-    } else {
-        return $row;
-    }
+    return $this->postDao->store($userId, $post);
   }
 }

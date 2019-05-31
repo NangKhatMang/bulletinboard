@@ -10,14 +10,22 @@
     </div>
     <div class="row">
         <div class="col-md-8 mx-auto">
-            <form action="/postConfirm" method="GET">
+            <form action="/post/create" method="POST">
+            @csrf
+            @method('PUT')
                 <div class="form-group">
                     <label for="title">Title</label>
                     <input type="text" id="title" name="title" class="form-control">
+                    @if ($errors->has('title'))    
+                        <label class="text-danger mt-2 mb-0">{{ $errors->first('title') }}</label>
+                    @endif
                 </div>
                 <div class="form-group">
                     <label for="desc" class="">Description</label>
                     <textarea name="desc" id="desc" class="form-control"></textarea>
+                    @if ($errors->has('desc'))
+                        <label class="text-danger mt-2 mb-0">{{ $errors->first('desc') }}</label>
+                    @endif
                 </div>
                 <div class="form-group">
                     <div class="text-center">

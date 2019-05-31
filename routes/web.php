@@ -14,40 +14,40 @@
 Route::get('/', function () {
     return view('Auth.login');
 });
-
+//login
 Route::post('/user/login', 'User\UserController@login');
 Route::get('/user/logout','User\UserController@logout');
 
-/* post */
-Route::get('/postAdd', function () {
-    return view('Post.create');
-});
-Route::get('/postConfirm', function () {
-    return view('Post.createConfirm');
-});
-Route::get('/postEdit', function () {
-    return view('Post.edit');
-});
-Route::get('/postList', function () {
-    return view('Post.postList');
-});
-Route::get('/postEditConfirm', function () {
-    return view('Post.editConfirm');
-});
+//post list
+Route::get('/post/user', 'Post\PostController@getUserPost');
+Route::get('/posts', 'Post\PostController@index');
+//post create
+Route::get('/post/create', 'Post\PostController@showRegisterForm');
+Route::put('/post/create', 'Post\PostController@create');
+Route::post('/post/create', 'Post\PostController@store');
+//post update
+Route::get('/post/{postId}', 'Post\PostController@edit');
+Route::put('/post/{postId}', 'Post\PostController@editConfirm');
+Route::post('/post/{postId}', 'Post\PostController@update');
+//posts search
+Route::get('/posts/search', 'Post\PostController@search');
+//post delete
+//Route::delete('/post/{postId}', 'Post\PostController@destroy');
+
+//user list
+Route::get('/users', 'User\UserController@index');
+//user create
+Route::get('/user/create', 'User\UserController@showRegisterForm');
+Route::put('/user/create', 'User\UserController@create');
+Route::post('/user/create', 'User\UserController@store');
+
+
 Route::get('/upload', function () {
     return view('Post.upload');
 });
 
 /* user */
-Route::get('/userList', function () {
-    return view('User.userList');
-});
-Route::get('/userAdd', function () {
-    return view('User.create');
-});
-Route::get('/userConfirm', function () {
-    return view('User.createConfirm');
-});
+
 Route::get('/userEdit', function () {
     return view('User.edit');
 });

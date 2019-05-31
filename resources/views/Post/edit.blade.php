@@ -12,14 +12,22 @@
     <div class="row">
         <div class="col"></div>
         <div class="col-md-8 ">
-            <form action="/postEditConfirm" method="GET">
+            <form action="/post/{{$postDetail->id}}" method="POST">
+                @csrf
+                @method('PUT')
                 <div class="form-group">
                     <label for="title">Title</label>
-                    <input type="text" id="title" name="title" class="form-control" value="Post 1">
+                    <input type="text" id="title" name="title" class="form-control" value="{{$postDetail->title}}">
+                    @if ($errors->has('title'))    
+                        <label class="text-danger mt-2 mb-0">{{ $errors->first('title') }}</label>
+                    @endif
                 </div>
                 <div class="form-group">
                     <label for="desc" class="">Description</label>
-                    <textarea name="desc" id="desc" class="form-control">Description for Post 1</textarea>
+                    <textarea name="desc" id="desc" class="form-control">{{$postDetail->description}}</textarea>
+                    @if ($errors->has('desc'))
+                        <label class="text-danger mt-2 mb-0">{{ $errors->first('desc') }}</label>
+                    @endif
                 </div>
                 <div class="form-group row">
                     <label for="status" class="col-2 form-check-label">Status</label>

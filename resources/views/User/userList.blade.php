@@ -1,22 +1,24 @@
 @extends('layouts.layout')
 
 @section('content')
-<div id="postList">
+<div id="userList">
     <div class="row mb-3">
-        <div class="col-md-1"></div>
         <div class="col">
             <h3>User List</h3>
         </div>
     </div>
     <div class="row justify-content-center">
         <form action="/search" method="GET" class="form-inline">
-            <input type="text" class="form-control mb-4 mr-3" placeholder="Search..."> 
+            <input type="text" class="form-control mb-4 mr-3" placeholder="Name">
+            <input type="text" class="form-control mb-4 mr-3" placeholder="Email">
+            <input type="date" class="form-control mb-4 mr-3" placeholder="Created From">
+            <input type="date" class="form-control mb-4 mr-3" placeholder="Created To">
             <button type="submit" class="btn btn-primary mb-4 mr-3">Search</button>
-            <a href="/userAdd" class="btn btn-primary mb-4 mr-3">Add</a>
+            <a href="/user/create" class="btn btn-primary mb-4 mr-3">Add</a>
         </form>
     </div>
     <div class="row">
-        <table class="table table-responsive-md table-striped table-bordered text-center col-md-9 mx-auto">
+        <table class="table table-responsive-md table-striped table-bordered text-center col-md-11 mx-auto">
             <thead class="thead-dark">
                 <th>Name</th>
                 <th>Email</th>
@@ -100,5 +102,43 @@
             </li>
         </ul>
     </div>
-</div><!-- /#postList -->
+    <div class="row">
+        <table class="table table-responsive-md table-striped table-bordered text-center col-md-11 mx-auto">
+            <thead class="thead-dark">
+                <th>Name</th>
+                <th>Email</th>
+                <th>Created User</th>
+                <th>Phone</th>
+                <th>Birth Date</th>
+                <th>Address</th>
+                <th>Posted Date</th>
+                <th colspan="2">Action</th>
+            </thead>
+            <tbody>
+                @foreach($users as $user)
+                <tr>
+                    <td><a href="">{{$user->name}}</a></td>
+                    <td>{{$user->email}}</td>
+                    <td>{{$user->create_user_id}}</td>
+                    <td>{{$user->phone}}</td>
+                    <td>{{$user->dob}}</td>
+                    <td>{{$user->address}}</td>
+                    <td>{{$user->created_at}}</td>
+                    <td><a href="/user/{{$user->id}}" class="btn btn-primary">Edit</a></td>
+                    <td>
+                        <form action="/user/{{$user->id}}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn btn-danger" type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+        <ul class="pagination col-md-12 justify-content-center">
+            {{$users->links()}}
+        </ul>
+    </div>
+</div><!-- /#userList -->
 @endsection

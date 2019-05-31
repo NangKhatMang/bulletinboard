@@ -27,9 +27,10 @@ class CreateUsersTable extends Migration
             $table->integer('create_user_id');
             $table->integer('updated_user_id');
             $table->integer('deleted_user_id')->nullable();
+            $table->datetime('created_at')->useCurrent();
+            $table->datetime('updated_at')->useCurrent();
             $table->datetime('deleted_at')->nullable();
             $table->rememberToken();
-            $table->timestamps();
         });
     }
 
