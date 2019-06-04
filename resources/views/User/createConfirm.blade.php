@@ -15,9 +15,9 @@
             </div>
         </div>
         <div class="col-md-8 mx-auto">
-            <form action="/user/create" method="POST">
+            <form action="/user/create" method="POST" enctype="multipart/form-data">
                 @csrf
-                <input type="hidden" name="profile" value="{{$profile}}">
+                <input type="hidden" name="fileName" value="{{$fileName}}">
                 <div class="form-group row">
                     <label class="col-md-4">Name</label>
                     <label class="border border-dark col-md-6">{{$name}}</label>
@@ -38,7 +38,7 @@
                     @if ($type == 0) <label class="border border-dark col-md-6">Admin</label>
                         @else <label class="border border-dark col-md-6">User</label>
                     @endif
-                    <input type="hidden" name="authority" value="{{$type}}">
+                    <input type="hidden" name="type" value="{{$type}}">
                 </div>
                 <div class="form-group row">
                     <label class="col-md-4">Phone</label>

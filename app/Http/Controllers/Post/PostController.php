@@ -9,6 +9,9 @@ use App\Services\Post\PostService;
 use Auth;
 use Validator;
 use App\Models\Post;
+use Illuminate\Support\Facades\Input;
+use App\Exports\PostsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PostController extends Controller
 {
@@ -23,6 +26,11 @@ class PostController extends Controller
     {
         return view('Post.create');
     }
+    public function postCancel(Request $request)
+    {
+        //session()->flashInput($request->input());
+        return redirect()->back()->withInput($request->all);
+    }
 
     /**
      * Display a listing of the resource.
@@ -32,8 +40,8 @@ class PostController extends Controller
     public function getUserPost()
     {
         $userId = Auth::user()->id;
-        $type = Auth::user()->type;
-        $posts = $this->postService->getUserPost($userId, $type);
+        $type   = Auth::user()->type;
+        $posts  = $this->postService->getUserPost($userId, $type);
         return view('Post.postList', compact('posts'));
     }
 
@@ -64,8 +72,8 @@ class PostController extends Controller
                         ->withErrors($validator)
                         ->withInput();
         }
-        $title  =   $request->title;
-        $desc   =   $request->desc;
+        $title  =  $request->title;
+        $desc   =  $request->desc;
         return view('Post.createConfirm', compact('title', 'desc'));
     }
 
@@ -77,12 +85,12 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $userId =   Auth::user()->id;
-        $post   =   new Post;
-        $post->title  =   $request->title;
-        $post->desc   =   $request->desc;
-        $insertCommand = $this->postService->store($userId, $post);
-        return redirect()->intended('posts');
+        $userId =  Auth::user()->id;
+        $post   =  new Post;
+        $post->title    =  $request->title;
+        $post->desc     =  $request->desc;
+        $posts  =  $this->postService->store($userId, $post);
+        return view('Post.postList', compact('posts'));
     }
 
     /**
@@ -94,7 +102,7 @@ class PostController extends Controller
     public function search(Request $request)
     {
         $searchKeyword = $request->search;
-        $posts  = $this->postService->searchPost($searchKeyword);
+        $posts = $this->postService->searchPost($searchKeyword);
         return view('Post.postlist', compact('posts'));
     }
 
@@ -155,11 +163,11 @@ class PostController extends Controller
     {
         $userId =   Auth::user()->id;
         $post   =   new Post;
-        $post->id    = $postId;
-        $post->title = $request->title;
-        $post->desc  = $request->desc;
-        $updateCommand = $this->postService->update($userId, $post);
-        return redirect()->intended('posts');
+        $post->id       =  $postId;
+        $post->title    =  $request->title;
+        $post->desc     =  $request->desc;
+        $posts  =  $this->postService->update($userId, $post);
+        return view('Post.postList', compact('posts'));
     }
 
     /**
@@ -178,5 +186,10 @@ class PostController extends Controller
         $userId = Auth::user()->id;
         $deletePost = $this->postService->destory($userId, $postId);
         return redirect()->intended('posts');
+    }
+    //export excel
+    public function export() 
+    {
+        return Excel::download(new PostsExport, 'posts.xlsx');
     }
 }

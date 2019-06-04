@@ -26,7 +26,7 @@
                 <div class="form-group">
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary  mr-4">Add</button>
-                        <a href="/post/create" class="btn btn-white">Cancel</a>
+                        <a href="/post/cancel" class="btn btn-white">Cancel</a>
                     </div>
                 </div>
             </form>

@@ -25,6 +25,7 @@ Route::get('/posts', 'Post\PostController@index');
 Route::get('/post/create', 'Post\PostController@showRegisterForm');
 Route::put('/post/create', 'Post\PostController@create');
 Route::post('/post/create', 'Post\PostController@store');
+Route::get('/post/cancel', 'Post\PostController@postCancel');
 //post update
 Route::get('/post/{postId}', 'Post\PostController@edit');
 Route::put('/post/{postId}', 'Post\PostController@editConfirm');
@@ -33,6 +34,8 @@ Route::post('/post/{postId}', 'Post\PostController@update');
 Route::get('/posts/search', 'Post\PostController@search');
 //post delete
 //Route::delete('/post/{postId}', 'Post\PostController@destroy');
+//export excel
+Route::get('/download', 'Post\PostController@export');
 
 //user list
 Route::get('/users', 'User\UserController@index');

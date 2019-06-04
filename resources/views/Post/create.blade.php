@@ -15,14 +15,14 @@
             @method('PUT')
                 <div class="form-group">
                     <label for="title">Title</label>
-                    <input type="text" id="title" name="title" class="form-control">
+                    <input type="text" id="title" name="title" class="form-control" value="{{old('title')}}">
                     @if ($errors->has('title'))    
                         <label class="text-danger mt-2 mb-0">{{ $errors->first('title') }}</label>
                     @endif
                 </div>
                 <div class="form-group">
                     <label for="desc" class="">Description</label>
-                    <textarea name="desc" id="desc" class="form-control"></textarea>
+                    <textarea name="desc" id="desc" class="form-control">{{old('desc')}}</textarea>
                     @if ($errors->has('desc'))
                         <label class="text-danger mt-2 mb-0">{{ $errors->first('desc') }}</label>
                     @endif

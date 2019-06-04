@@ -10,8 +10,9 @@ use App\Http\Controllers\Redirect;
 use App\Models\User;
 use Log;
 use Validator;
-use Input;
 use Auth;
+use Hash;
+use File;
 
 class UserController extends Controller
 {
@@ -24,7 +25,6 @@ class UserController extends Controller
 
     public function showRegisterForm()
     {
-        //session()->forget('pwd-not-match');
         return view('User.create');
     }
 
@@ -37,10 +37,10 @@ class UserController extends Controller
      */
     public function login(Request $request)
     {
-        $email  =   $request->email;
-        $pwd    =   $request->password;
-        $validator = Validator::make($request->all(), [
-            'email' =>  'required|email',
+        $email      =   $request->email;
+        $pwd        =   $request->password;
+        $validator  =   Validator::make($request->all(), [
+            'email'     =>  'required|email',
             'password'  =>  'required',
         ]);
         if ($validator->fails()) {
@@ -88,14 +88,13 @@ class UserController extends Controller
      */
     public function create(Request $request)
     {
-        session()->forget('pwd-not-match');
         $validator = Validator::make($request->all(), [
             'username'  =>  'required',
             'email'     =>  'required|email|unique:users,email',
             'password'  =>  'required|min:8|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/',
             'password_confirmation' => 'required|min:8|regex:/^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/',
             'phone'     =>  'required',
-            'profile'   =>  'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'profileImg'   =>  'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
         if ($validator->fails()) {
             return redirect()->back()
@@ -109,17 +108,19 @@ class UserController extends Controller
         $phone   =  $request->phone;
         $dob     =  $request->dob;
         $address =  $request->address;
-        $profile =  $request->profile;
+        $profileImg   =  $request->file('profileImg');
+
         //password show as ***
         $hide = "*";
         $pwdHide = str_pad($hide, strlen($pwd), "*");
         //tempory save profile photo
-        $tempProfile = time().'.'.request()->profile->getClientOriginalExtension();
-        request()->profile->move(public_path('img/tempProfile'), $tempProfile);
-        $tempProfilePath = '/img/tempProfile/'.$tempProfile;
+        $fileName = $profileImg->getClientOriginalName();
+        $profileImg->move('img/tempProfile', $fileName);
+        $tempProfilePath = '/img/tempProfile/'.$fileName;
 
         return view('User.createConfirm', compact(
-            'name', 'email','pwd', 'type', 'phone', 'dob', 'address', 'profile', 'pwdHide', 'tempProfile', 'tempProfilePath'));
+            'name', 'email','pwd', 'type', 'phone', 'dob', 'address', 'pwdHide', 'tempProfilePath', 'fileName'
+        ));
     }
 
     /**
@@ -130,17 +131,23 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $userId =   Auth::user()->id;
-        $user = new User;
-        $user->name    =  $request->username;
-        $user->email   =  $request->email;
-        $user->pwd     =  $request->password;
-        $user->type    =  $request->type;
-        $user->phone   =  $request->phone;
-        $user->dob     =  $request->dob;
-        $user->address =  $request->address;
-        $user->profile =  $request->profile;
-        $insertCommand =  $this->userService->store($userId, $user);
+        $userId      = Auth::user()->id;
+        //save profile photo
+        $fileName  =  $request->fileName;
+        $oldpath = public_path().'/img/tempProfile/'.$fileName;
+        $newpath = public_path().'/img/profile/'.$fileName;
+        File::move($oldpath, $newpath);
+
+        $user           =  new User;
+        $user->name     =  $request->username;
+        $user->email    =  $request->email;
+        $user->password =  Hash::make($request->password);
+        $user->type     =  $request->type;
+        $user->phone    =  $request->phone;
+        $user->dob      =  $request->dob;
+        $user->address  =  $request->address;
+        $user->profile  =  $newpath;
+        $insertCommand  =  $this->userService->store($userId, $user);
         return redirect()->intended('users');
 
     }

@@ -19,8 +19,7 @@ class PostDao implements PostDaoInterface
     if ($type == '0') {
       $posts = Post::paginate(50);
     } else {
-      $posts = Post::where(
-        'create_user_id', 'LIKE', '%'. $userId . '%')
+      $posts = Post::where('create_user_id', $userId)
         ->paginate(50);
     }
     return $posts;
@@ -55,14 +54,16 @@ class PostDao implements PostDaoInterface
    */
   public function store($userId, $post)
   {
-    $posts = new Post([
-      'title' =>  $post->title,
-      'description' =>  $post->desc,
+    $insertPost = new Post([
+      'title'           =>  $post->title,
+      'description'     =>  $post->desc,
       'create_user_id'  =>  $userId,
-      'updated_user_id'  =>  $userId
+      'updated_user_id' =>  $userId
     ]);
-    $posts->save();
-    return redirect()->back();
+    $insertPost->save();
+    $posts = Post::where('create_user_id', $userId)
+        ->paginate(50);
+    return $posts;
   }
 
   /**
@@ -72,13 +73,15 @@ class PostDao implements PostDaoInterface
    */
   public function update($userId, $post)
   {
-    $posts = Post::find($post->id);
-    $posts->title        = $post->title;
-    $posts->description  = $post->desc;
-    $posts->updated_user_id  = $userId;
-    $posts->updated_at       = now();
-    $posts->save();
-    return redirect()->back();
+    $updatePost = Post::find($post->id);
+    $updatePost->title            =  $post->title;
+    $updatePost->description      =  $post->desc;
+    $updatePost->updated_user_id  =  $userId;
+    $updatePost->updated_at       =  now();
+    $updatePost->save();
+    $posts = Post::where('create_user_id', $userId)
+        ->paginate(50);
+    return $posts;
   }
 
   /**
@@ -91,12 +94,9 @@ class PostDao implements PostDaoInterface
     if ($searchKeyword == null) {
       $posts = Post::paginate(50);
     } else {
-        $posts = Post::where(
-            'title', 'LIKE', '%' . $searchKeyword . '%')
-            ->paginate(50);
-        $posts = Post::where(
-            'description', 'LIKE', '%' . $searchKeyword . '%')
-            ->paginate(50);
+        $posts = Post::where('title', 'LIKE', '%' . $searchKeyword . '%')
+                      ->orwhere('description', 'LIKE', '%' . $searchKeyword . '%')
+                      ->paginate(50);
     }
     return $posts;
   }

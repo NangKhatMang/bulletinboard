@@ -34,7 +34,7 @@
                 <tr>
                     <td><a href="">{{$post->title}}</a></td>
                     <td>{{$post->description}}</td>
-                    <td>{{$post->create_user_id}}</td>
+                    <td>{{$post->user->name}}</td>
                     <td>{{$post->created_at}}</td>
                     <td><a href="/post/{{$post->id}}" class="btn btn-primary">Edit</a></td>
                     <td>

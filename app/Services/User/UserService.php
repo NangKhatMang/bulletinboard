@@ -34,8 +34,8 @@ class UserService implements UserServiceInterface
    * @param Object
    * @return $users
    */
-  public function store($userId, $post)
+  public function store($userId, $user)
   {
-    return $this->postDao->store($userId, $post);
+    return $this->userDao->store($userId, $user);
   }
 }
