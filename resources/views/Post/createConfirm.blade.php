@@ -9,8 +9,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col"></div>
-        <div class="col-md-8">
+        <div class="col-md-8 mx-auto">
             <form action="/post/create" method="POST">
                 @csrf
                 <div class="form-group">
@@ -31,7 +30,6 @@
                 </div>
             </form>
         </div>
-        <div class="col"></div>
     </div>
 </div><!-- /#postConfirm -->
 @endsection

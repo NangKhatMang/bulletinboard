@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 
 @section('content')
-<div id="postAdd">
+<div id="postCreate">
     <div class="row mb-3">
         <div class="col-md-1"></div>
         <div class="col">
@@ -36,5 +36,5 @@
             </form>
         </div>
     </div>
-</div><!-- /#postAdd -->
+</div><!-- /#postCreate -->
 @endsection

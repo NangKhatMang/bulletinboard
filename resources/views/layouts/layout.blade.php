@@ -32,7 +32,7 @@
                                 @endif
                                 @if(Auth::user()->type == '1')
                                     <li class="nav-item">
-                                        <a class="nav-link" href="/userProfile">Profile</a>
+                                        <a class="nav-link" href="/user/profile/{{Auth::user()->id}}">Profile</a>
                                     </li>
                                 @endif
                                 <li class="nav-item">

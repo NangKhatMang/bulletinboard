@@ -10,18 +10,17 @@
         </div>
     </div>
     <div class="row">
-        <div class="col"></div>
-        <div class="col-md-8">
+        <div class="col-md-8 mx-auto">
             <form action="/post/{{$postId}}" method="POST">
                 @csrf
                 <div class="form-group">
-                    <label for="title">Title</label>
-                    <label class="border border-dark col">{{$title}}</label>
+                    <label >Title</label>
+                    <label class="border border-dark p-2 col">{{$title}}</label>
                     <input type="hidden" name="title" value="{{$title}}">
                 </div>
                 <div class="form-group">
-                    <label for="desc" class="">Description</label>
-                    <label class="border border-dark col">{{$desc}}</label>
+                    <label class="">Description</label>
+                    <label class="border border-dark p-4 col">{{$desc}}</label>
                     <input type="hidden" name="desc" value="{{$desc}}">
                 </div>
                 <div class="form-group row">
@@ -38,7 +37,6 @@
                 </div>
             </form>
         </div>
-        <div class="col"></div>
     </div>
-</div><!-- /#postConfirm -->
+</div><!-- /#postEditConfirm -->
 @endsection

@@ -43,6 +43,14 @@ Route::get('/users', 'User\UserController@index');
 Route::get('/user/create', 'User\UserController@showRegisterForm');
 Route::put('/user/create', 'User\UserController@create');
 Route::post('/user/create', 'User\UserController@store');
+//user search
+Route::get('/user/search', 'User\UserController@search');
+//user update
+Route::get('/user/{userId}', 'User\UserController@edit');
+Route::put('/user/{userId}', 'User\UserController@editConfirm');
+Route::post('/user/{userId}', 'User\UserController@update');
+//user profile
+Route::get('/user/profile/{userId}', 'User\UserController@showProfile');
 
 
 Route::get('/upload', function () {

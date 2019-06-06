@@ -17,9 +17,10 @@ class PostDao implements PostDaoInterface
   public function getUserPost($userId, $type)
   {
     if ($type == '0') {
-      $posts = Post::paginate(50);
+      $posts = Post::orderBy('updated_at','DESC')->paginate(50);
     } else {
       $posts = Post::where('create_user_id', $userId)
+        ->orderBy('updated_at','DESC')
         ->paginate(50);
     }
     return $posts;
@@ -32,7 +33,7 @@ class PostDao implements PostDaoInterface
    */
   public function getPost()
   {
-    $posts = Post::paginate(50);
+    $posts = Post::orderBy('updated_at','DESC')->paginate(50);
     return $posts;
   }
 
@@ -62,6 +63,7 @@ class PostDao implements PostDaoInterface
     ]);
     $insertPost->save();
     $posts = Post::where('create_user_id', $userId)
+        ->orderBy('updated_at','DESC')
         ->paginate(50);
     return $posts;
   }
@@ -80,6 +82,7 @@ class PostDao implements PostDaoInterface
     $updatePost->updated_at       =  now();
     $updatePost->save();
     $posts = Post::where('create_user_id', $userId)
+        ->orderBy('updated_at','DESC')
         ->paginate(50);
     return $posts;
   }
@@ -92,10 +95,11 @@ class PostDao implements PostDaoInterface
   public function searchPost($searchKeyword)
   {
     if ($searchKeyword == null) {
-      $posts = Post::paginate(50);
+      $posts = Post::orderBy('updated_at','DESC')->paginate(50);
     } else {
         $posts = Post::where('title', 'LIKE', '%' . $searchKeyword . '%')
                       ->orwhere('description', 'LIKE', '%' . $searchKeyword . '%')
+                      ->orderBy('updated_at','DESC')
                       ->paginate(50);
     }
     return $posts;

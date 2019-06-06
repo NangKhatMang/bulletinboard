@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 
 @section('content')
-<div id="postAdd">
+<div id="userEdit">
     <div class="row mb-3">
         <div class="col-md-1"></div>
         <div class="col">
@@ -9,36 +9,69 @@
         </div>
     </div>
     <div class="row">
-        <div class="col"></div>
-        <div class="col-md-8 ">
-            <form action="/userEditConfirm" method="GET">
+        <div class="col-md-8 mx-auto">
+            <div class="col-md-8  mx-auto">
+                <div class="text-center mb-4">
+                    <img width="100px" height="80px" src="{{$userDetail->profile}}" alt="User-profile" class="img-thumbnail">
+                </div>
+            </div>
+            <form action="/user/{{$userDetail->id}}" method="POST" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
+                <input type="hidden" name="oldProfile" value="{{$userDetail->profile}}">
                 <div class="form-group row">
-                    <label for="title" class="col-md-4">Name</label>
-                    <input type="text" id="title" name="username" value="User 1" class="form-control col-md-6">
+                    <label for="name" class="col-md-4">Name</label>
+                    <input type="text" id="name" name="user_name" class="form-control col-md-6"
+                        value="@if(old('user_name')){{old('user_name')}}@else{{$userDetail->name}}@endif" >
+                    @if ($errors->has('user_name'))    
+                        <div class="col-md-4"></div>
+                        <div class="col-md-6 mt-1 text-danger">{{ $errors->first('user_name') }}</div>
+                    @endif
                 </div>
                 <div class="form-group row">
                     <label for="email" class="col-md-4">Email Address</label>
-                    <input type="text" id="email" name="email" value="user1@gmail.com" class="form-control col-md-6">
+                    <input type="text" id="email" name="email" class="form-control col-md-6"
+                        value="@if(old('email')){{old('email')}}@else{{$userDetail->email}}@endif">
+                    @if ($errors->has('email'))    
+                        <div class="col-md-4"></div>
+                        <div class="col-md-6 mt-1 text-danger">{{ $errors->first('email') }}</div>
+                    @endif
                 </div>
                 <div class="form-group row">
-                    <label for="authority" class="col-md-4">Authority</label>
-                    <select name="authority" id="authority" class="col-md-6">
-                        <option value=""></option>
-                        <option value="admin">Admin</option>
-                        <option value="user" selected>User</option>
+                    <label for="type" class="col-md-4">Type</label>
+                    <select name="type" id="type" class="col-md-6">
+                        <option value="" disabled selected>-- Choose Authority --</option>
+                        <option value="0"
+                            @if(old('type')=='0' ) {{"selected"}} @endif>Admin</option>
+                        <option value="1"
+                            @if(old('type')=='1' ) {{"selected"}} @endif>User</option>
                     </select>
                 </div>
                 <div class="form-group row">
                     <label for="phone" class="col-md-4">Phone</label>
-                    <input type="text" id="phone" name="phone" value="09456325487" class="form-control col-md-6">
+                    <input type="text" id="phone" name="phone" class="form-control col-md-6"
+                        value="@if(old('phone')){{old('phone')}}@else{{$userDetail->phone}}@endif">
+                    @if ($errors->has('phone'))    
+                        <div class="col-md-4"></div>
+                        <div class="col-md-6 mt-1 text-danger">{{ $errors->first('phone') }}</div>
+                    @endif
                 </div>
                 <div class="form-group row">
                     <label for="dob" class="col-md-4">Date of Birth</label>
-                    <input type="date" id="dob" name="dob" value="5-5-1995" class="form-control col-md-6">
+                    <input type="date" id="dob" name="dob" class="form-control col-md-6"
+                        value="@if(old('dob')){{old('dob')}}@else{{$userDetail->dob}}@endif">
                 </div>
                 <div class="form-group row">
                     <label for="address" class="col-md-4">Address</label>
-                    <textarea name="address" id="address" class="form-control col-md-6">Yangon</textarea>
+                    <textarea name="address" id="address" class="form-control col-md-6">@if(old('address')){{old('address')}}@else{{$userDetail->address}}@endif</textarea>
+                </div>
+                <div class="form-group row">
+                    <label for="profile_photo" class="col-md-4">Profile</label>
+                    <input type="file" name="profile_photo" class="form-control-file col-md-6" id="profile_photo">
+                    @if ($errors->has('profile_photo'))    
+                        <div class="col-md-4"></div>
+                        <div class="col-md-6 mt-1 text-danger">{{ $errors->first('profile_photo') }}</div>
+                    @endif
                 </div>
                 <div class="form-group row">
                     <label for="password" class="col-md-4">Password</label>
@@ -52,8 +85,6 @@
                 </div>
             </form>
         </div>
-        <div class="col"></div>
     </div>
-        
-</div><!-- /#postAdd -->
+</div><!-- /#userEdit -->
 @endsection

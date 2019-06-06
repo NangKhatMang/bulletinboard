@@ -23,6 +23,7 @@
     <div class="row">
         <table class="table table-responsive-md table-striped table-bordered text-center col-md-9 mx-auto">
             <thead class="thead-dark">
+                <th>No.</th>
                 <th>Post Title</th>
                 <th>Post Description</th>
                 <th>Posted User</th>
@@ -30,8 +31,10 @@
                 <th colspan="2">Action</th>
             </thead>
             <tbody>
-                @foreach($posts as $post)
+                <?php $i = 1; ?>
+                @foreach($posts as $key => $post)
                 <tr>
+                    <td>{{ $posts->firstItem() + $key }}</td>
                     <td><a href="">{{$post->title}}</a></td>
                     <td>{{$post->description}}</td>
                     <td>{{$post->user->name}}</td>
@@ -45,6 +48,7 @@
                         </form>
                     </td>
                 </tr>
+                <?php $i++; ?>
                 @endforeach
             </tbody>
         </table>

@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 
 @section('content')
-<div id="postAdd">
+<div id="usercreate">
     <div class="row mb-3">
         <div class="col-md-1"></div>
         <div class="col">
@@ -15,10 +15,10 @@
             @method('PUT')
                 <div class="form-group row">
                     <label for="name" class="col-md-4">Name</label>
-                    <input type="text" id="name" name="username" value="{{old('username')}}" class="form-control col-md-6">
-                    @if ($errors->has('username'))    
+                    <input type="text" id="name" name="user_name" value="{{old('user_name')}}" class="form-control col-md-6">
+                    @if ($errors->has('user_name'))    
                         <div class="col-md-4"></div>
-                        <div class="col-md-6 mt-1 text-danger">{{ $errors->first('username') }}</div>
+                        <div class="col-md-6 mt-1 text-danger">{{ $errors->first('user_name') }}</div>
                     @endif
                 </div>
                 <div class="form-group row">
@@ -88,5 +88,5 @@
             </form>
         </div>
     </div>
-</div><!-- /#postAdd -->
+</div><!-- /#usercreate -->
 @endsection

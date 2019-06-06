@@ -77,6 +77,7 @@ class UserController extends Controller
      */
     public function index()
     {
+        session()->forget(['name','email','dateFrom','dateTo']);
         $users = $this->userService->getUser();
         return view('User.userList', compact('users'));
     }
@@ -89,11 +90,11 @@ class UserController extends Controller
     public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'username'  =>  'required',
+            'user_name'  =>  'required',
             'email'     =>  'required|email|unique:users,email',
             'password'  =>  'required|min:8|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/',
             'password_confirmation' => 'required|min:8|regex:/^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/',
-            'phone'     =>  'required',
+            'phone'     =>  'required|numeric|regex:/(09)[0-9]{7}/',
             'profileImg'   =>  'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
         if ($validator->fails()) {
@@ -101,7 +102,7 @@ class UserController extends Controller
                         ->withErrors($validator)
                         ->withInput();
         }
-        $name    =  $request->username;
+        $name    =  $request->user_name;
         $email   =  $request->email;
         $pwd     =  $request->password;
         $type    =  $request->type;
@@ -132,14 +133,13 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $userId      = Auth::user()->id;
-        //save profile photo
+        //save profile image
         $fileName  =  $request->fileName;
         $oldpath = public_path().'/img/tempProfile/'.$fileName;
         $newpath = public_path().'/img/profile/'.$fileName;
         File::move($oldpath, $newpath);
-
         $user           =  new User;
-        $user->name     =  $request->username;
+        $user->name     =  $request->user_name;
         $user->email    =  $request->email;
         $user->password =  Hash::make($request->password);
         $user->type     =  $request->type;
@@ -149,7 +149,28 @@ class UserController extends Controller
         $user->profile  =  $newpath;
         $insertCommand  =  $this->userService->store($userId, $user);
         return redirect()->intended('users');
+    }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function search(Request $request)
+    {
+        $name = $request->name;
+        $email = $request->email;
+        $dateFrom = $request->dateFrom;
+        $dateTo = $request->dateTo;
+        session([
+            'name' => $name,
+            'email'=> $email,
+            'dateFrom' => $dateFrom,
+            'dateTo' => $dateTo,
+        ]);
+        $users = $this->userService->searchUser($name, $email, $dateFrom, $dateTo);
+        return view('User.userlist', compact('users'));
     }
 
     /**
@@ -158,9 +179,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function showProfile($userId)
     {
-        //
+        $userProfile = $this->userService->showProfile($userId);
+        return view('User.userProfile', compact('userProfile'));
     }
 
     /**
@@ -169,9 +191,50 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($userId)
     {
-        //
+        $userDetail = $this->userService->editUser($userId);
+        return view('User.edit', compact('userDetail'));
+    }
+
+    /**
+     * Update Confirm the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function editConfirm(Request $request, $userId)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'user_name'  =>  'required',
+            'email'     =>  'required|email',
+            'phone'     =>  'required|numeric|regex:/(09)[0-9]{7}/',
+            'profile_photo'   =>  'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+        $user   =   new User;
+        $user->name    =  $request->user_name;
+        $user->email   =  $request->email;
+        $user->type    =  $request->type;
+        $user->phone   =  $request->phone;
+        $user->dob     =  $request->dob;
+        $user->address =  $request->address;
+        $newProfile =  $request->file('profile_photo');
+        $oldProfile = $request->oldProfile;
+
+        //tempory save new profile photo
+        if ($newProfile) {
+            $fileName = $newProfile->getClientOriginalName();
+            $newProfile->move('img/tempProfile', $fileName);
+            $user->profile = $fileName;
+        }
+        return view('User.Update', compact('user', 'oldProfile', 'userId'));
     }
 
     /**
@@ -181,9 +244,29 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $userId)
     {
-        //
+        $authId = Auth::user()->id;
+        $user   = new User;
+        $user->id      =  $userId;
+        $user->name    =  $request->name;
+        $user->email   =  $request->email;
+        $user->type    =  $request->type;
+        $user->phone   =  $request->phone;
+        $user->dob     =  $request->dob;
+        $user->address =  $request->address;
+        $newProfile    =  $request->newProfile;
+        $oldProfile    =  $request->oldProfile;       
+        if ($newProfile) {
+            $oldpath = public_path().'/img/tempProfile/'.$newProfile;
+            $newpath = public_path().'/img/profile/'.$newProfile;
+            File::move($oldpath, $newpath);
+            $user->profile = '/img/profile/'.$newProfile;
+        } else {
+            $user->profile = $oldProfile;
+        }
+        $updateCommand  =  $this->userService->update($authId, $user);
+        return redirect()->intended('users');
     }
 
     /**

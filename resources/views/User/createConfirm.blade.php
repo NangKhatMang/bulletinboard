@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 
 @section('content')
-<div id="postAdd">
+<div id="userConfirm">
     <div class="row mb-3">
         <div class="col-md-1"></div>
         <div class="col">
@@ -10,8 +10,8 @@
     </div>
     <div class="row">
         <div class="col-md-8  mx-auto">
-            <div class="col-1 mx-auto mb-4">
-                <img src="{{$tempProfilePath}}" alt="User-profile">
+            <div class="text-center mb-4">
+                <img src="{{$tempProfilePath}}" alt="User-profile" class="img-thumbnail">
             </div>
         </div>
         <div class="col-md-8 mx-auto">
@@ -64,5 +64,5 @@
             </form>
         </div>
     </div>
-</div><!-- /#postAdd -->
+</div><!-- /#userConfirm -->
 @endsection

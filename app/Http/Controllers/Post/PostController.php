@@ -178,11 +178,6 @@ class PostController extends Controller
      */
     public function destroy($postId)
     {
-        //$postDetail = Post::find($postId);
-        //$date = date('Y-m-d H:i:s');
-        //$now  = now();
-        //$carbon = Carbon::now();
-        //var_dump($date,$now,$carbon);die();
         $userId = Auth::user()->id;
         $deletePost = $this->postService->destory($userId, $postId);
         return redirect()->intended('posts');
