@@ -5,20 +5,28 @@
     <div class="row mb-3">
         <div class="col-md-1"></div>
         <div class="col">
-            <h3>Upload</h3>
+            <h3>Upload CSV File</h3>
         </div>
     </div>
     <div class="row">
-        <div class="col"></div>
-        <div class="col-md-8 ">
-            <form action="/postList" method="GET" class="border border-dark p-5">
+        <div class="col-md-6 mx-auto">
+            <form action="/csv/upload" method="POST" enctype="multipart/form-data" class="border border-dark p-5">
+                @csrf
                 <div class="form-group">
-                    <input type="file" class="form-control-file">
+                    <label for="file" class="h4 mb-3">Select a file to upload</label>
+                    <input type="file" id="file" name="file" class="form-control-file border border-dark">
+                    @if($errors->has('file'))
+                        <label class="text-danger mt-2 mb-0">{{ $errors->first('file') }}</label>
+                    @endif
                 </div>
-                <button type="submit" class="btn btn-primary mt-2">Import File</button>
+                <div class="form-group">
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary mt-2">Import File</button>
+                    </div>
+                </div>
             </form>
         </div>
-        <div class="col"></div>
     </div>
 </div><!-- /#postAdd -->
+
 @endsection

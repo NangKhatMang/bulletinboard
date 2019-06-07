@@ -32,7 +32,9 @@
                 </div>
                 <div class="form-group row">
                     <label class="col-md-4">Type</label>
-                    <label class="border border-dark p-2 col-md-6">{{$user->type}}</label>
+                    @if ($user->type == 0) <label class="border border-dark p-2 col-md-6">Admin</label>
+                        @else <label class="border border-dark p-2 col-md-6">User</label>
+                    @endif
                     <input type="hidden" name="type" value="{{$user->type}}">
                 </div>
                 <div class="form-group row">

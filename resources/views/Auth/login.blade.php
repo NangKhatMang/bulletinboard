@@ -39,8 +39,8 @@
                     </label>
                 </div>
             @endif
-            <div class="form-group row">
-                <div class="col text-center">
+            <div class="form-group">
+                <div class="text-center">
                     <button type="submit" class="btn btn-primary">Login</button>
                 </div>
             </div>

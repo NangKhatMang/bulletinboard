@@ -115,12 +115,14 @@ class UserController extends Controller
         $hide = "*";
         $pwdHide = str_pad($hide, strlen($pwd), "*");
         //tempory save profile photo
-        $fileName = $profileImg->getClientOriginalName();
-        $profileImg->move('img/tempProfile', $fileName);
-        $tempProfilePath = '/img/tempProfile/'.$fileName;
+        $fileName = "";
+        if ($profileImg) {
+            $fileName = $profileImg->getClientOriginalName();
+            $profileImg->move('img/tempProfile', $fileName);
+        }
 
         return view('User.createConfirm', compact(
-            'name', 'email','pwd', 'type', 'phone', 'dob', 'address', 'pwdHide', 'tempProfilePath', 'fileName'
+            'name', 'email','pwd', 'type', 'phone', 'dob', 'address', 'pwdHide', 'fileName'
         ));
     }
 
@@ -132,11 +134,11 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $userId      = Auth::user()->id;
+        $userId    =  Auth::user()->id;
         //save profile image
         $fileName  =  $request->fileName;
-        $oldpath = public_path().'/img/tempProfile/'.$fileName;
-        $newpath = public_path().'/img/profile/'.$fileName;
+        $oldpath   =  public_path().'/img/tempProfile/'.$fileName;
+        $newpath   =  public_path().'/img/profile/'.$fileName;
         File::move($oldpath, $newpath);
         $user           =  new User;
         $user->name     =  $request->user_name;
@@ -146,7 +148,7 @@ class UserController extends Controller
         $user->phone    =  $request->phone;
         $user->dob      =  $request->dob;
         $user->address  =  $request->address;
-        $user->profile  =  $newpath;
+        $user->profile  =  '/img/profile/'.$fileName;
         $insertCommand  =  $this->userService->store($userId, $user);
         return redirect()->intended('users');
     }
@@ -185,6 +187,11 @@ class UserController extends Controller
         return view('User.userProfile', compact('userProfile'));
     }
 
+    public function showPasswordForm($userId)
+    {
+        return view('User.changePassword', compact('$userId'));
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -206,10 +213,10 @@ class UserController extends Controller
      */
     public function editConfirm(Request $request, $userId)
     {
-
+        $user = User::find($userId);
         $validator = Validator::make($request->all(), [
             'user_name'  =>  'required',
-            'email'     =>  'required|email',
+            'email'     =>  'required|email|unique:users,email,'.$user->id,
             'phone'     =>  'required|numeric|regex:/(09)[0-9]{7}/',
             'profile_photo'   =>  'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
@@ -256,7 +263,7 @@ class UserController extends Controller
         $user->dob     =  $request->dob;
         $user->address =  $request->address;
         $newProfile    =  $request->newProfile;
-        $oldProfile    =  $request->oldProfile;       
+        $oldProfile    =  $request->oldProfile;
         if ($newProfile) {
             $oldpath = public_path().'/img/tempProfile/'.$newProfile;
             $newpath = public_path().'/img/profile/'.$newProfile;
@@ -267,6 +274,34 @@ class UserController extends Controller
         }
         $updateCommand  =  $this->userService->update($authId, $user);
         return redirect()->intended('users');
+    }
+
+    /**
+     * Change password the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function changePassword(Request $request, $userId)
+    {
+        $validator = Validator::make($request->all(), [
+            'old_password'  =>  'required|min:8|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/',
+            'password'  =>  'required|min:8|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/',
+            'password_confirmation' => 'required|min:8|regex:/^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+        $userDetail = $this->userService->changePassword($userId,);
+        $old_password   =   $request->old_password;
+        if ()
+        $password   =   $request->password;
+        $password_confirmation   =   $request->password_confirmation;
+        
+        return view('Post.update', compact('title', 'desc', 'postId'));
     }
 
     /**

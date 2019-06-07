@@ -42,9 +42,9 @@
                     <select name="type" id="type" class="col-md-6">
                         <option value="" disabled selected>-- Choose Authority --</option>
                         <option value="0"
-                            @if(old('type')=='0' ) {{"selected"}} @endif>Admin</option>
+                            @if(old('type')=='0' ) {{"selected"}} @elseif($userDetail->type=='0') {{"selected"}} @endif>Admin</option>
                         <option value="1"
-                            @if(old('type')=='1' ) {{"selected"}} @endif>User</option>
+                            @if(old('type')=='1' ) {{"selected"}} @elseif($userDetail->type=='1') {{"selected"}} @endif>User</option>
                     </select>
                 </div>
                 <div class="form-group row">
@@ -75,7 +75,7 @@
                 </div>
                 <div class="form-group row">
                     <label for="password" class="col-md-4">Password</label>
-                    <a href="/changePassword" class="btn btn-primary form-control col-md-3">Change Password</a>
+                    <a href="/changePwd/{{$userDetail->id}}" class="btn btn-primary form-control col-md-3">Change Password</a>
                 </div>
                 <div class="form-group">
                     <div class="text-center">

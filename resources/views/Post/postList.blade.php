@@ -15,7 +15,7 @@
                 <input type="text" name="search" class="form-control mb-4 mr-3" placeholder="Search...">
                 <button type="submit" class="btn btn-primary mb-4 mr-3">Search</button>
                 <a href="/post/create" class="btn btn-primary mb-4 mr-3">Add</a>
-                <a href="/upload" class="btn btn-primary mb-4 mr-3">Upload</a>
+                <a href="/csv/upload" class="btn btn-primary mb-4 mr-3">Upload</a>
                 <a href="/download" class="btn btn-primary mb-4 mr-3">Download</a>
             </div>
         </form>

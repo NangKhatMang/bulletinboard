@@ -25,7 +25,6 @@ Route::get('/posts', 'Post\PostController@index');
 Route::get('/post/create', 'Post\PostController@showRegisterForm');
 Route::put('/post/create', 'Post\PostController@create');
 Route::post('/post/create', 'Post\PostController@store');
-Route::get('/post/cancel', 'Post\PostController@postCancel');
 //post update
 Route::get('/post/{postId}', 'Post\PostController@edit');
 Route::put('/post/{postId}', 'Post\PostController@editConfirm');
@@ -33,9 +32,12 @@ Route::post('/post/{postId}', 'Post\PostController@update');
 //posts search
 Route::get('/posts/search', 'Post\PostController@search');
 //post delete
-//Route::delete('/post/{postId}', 'Post\PostController@destroy');
+// Route::delete('/post/{postId}', 'Post\PostController@destroy');
 //export excel
 Route::get('/download', 'Post\PostController@export');
+//import csv file
+Route::get('/csv/upload', 'Post\PostController@showUploadForm');
+Route::post('/csv/upload', 'Post\PostController@import');
 
 //user list
 Route::get('/users', 'User\UserController@index');
@@ -49,26 +51,8 @@ Route::get('/user/search', 'User\UserController@search');
 Route::get('/user/{userId}', 'User\UserController@edit');
 Route::put('/user/{userId}', 'User\UserController@editConfirm');
 Route::post('/user/{userId}', 'User\UserController@update');
+//change Password
+Route::get('/changePwd/{userId}', 'User\Controller@showPwdForm');
+Route::Post('/changePwd/{userId}', 'User\Controller@changePassword');
 //user profile
 Route::get('/user/profile/{userId}', 'User\UserController@showProfile');
-
-
-Route::get('/upload', function () {
-    return view('Post.upload');
-});
-
-/* user */
-
-Route::get('/userEdit', function () {
-    return view('User.edit');
-});
-Route::get('/userEditConfirm', function () {
-    return view('User.editConfirm');
-});
-
-Route::get('/changePassword', function () {
-    return view('User.changePassword');
-});
-Route::get('/userProfile', function () {
-    return view('User.userProfile');
-});

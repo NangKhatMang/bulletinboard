@@ -26,10 +26,10 @@ class PostController extends Controller
     {
         return view('Post.create');
     }
-    public function postCancel(Request $request)
+
+    public function showUploadForm()
     {
-        //session()->flashInput($request->input());
-        return redirect()->back()->withInput($request->all);
+        return view('Post.upload');
     }
 
     /**
@@ -185,6 +185,39 @@ class PostController extends Controller
     //export excel
     public function export() 
     {
-        return Excel::download(new PostsExport, 'posts.xlsx');
+        return Excel::download(new PostsExport, 'posts.csv');
+    }
+
+    //import csv file
+    public function import(Request $request) 
+    {
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|mimes:csv,txt|max:2048'
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        }
+        $file = $request->file('file');
+        $fileName = $file->getClientOriginalName();
+        $file->move('upload', $fileName);
+        $filepath = public_path().'/upload/'.$fileName;
+        if (($handle = fopen(public_path().'/upload/'.$fileName, 'r')) !== FALSE) {
+            while (($data = fgetcsv($handle, 1000, ',' )) !== FALSE ) {
+                $post = new Post;
+                $post->id = (int)$data [0];
+                $post->title = $data [1];
+                $post->description = $data [2];
+                $post->status = (int)$data [3];
+                $post->create_user_id = (int)$data [4];
+                $post->updated_user_id = (int)$data [5];
+                $post->deleted_user_id = (int)$data [6];
+                $post->created_at = strtotime($data [7]);
+                $post->updated_at = strtotime($data [8]);
+                //$post->deleted_at = strtotime($data [9]);
+                $post->save ();
+                }
+            fclose($handle);
+        }
+        return redirect()->intended('posts');
     }
 }

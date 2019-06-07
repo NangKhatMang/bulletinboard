@@ -10,7 +10,16 @@ class PostsExport implements FromCollection, WithHeadings
 {
     public function headings(): array {
         return [
-           "Post Title","Post Description","Posted User","Posted Date"
+           "Post ID",
+           "Post Title",
+           "Post Description",
+           "Post Status",
+           "Created User ID",
+           "Updated User ID",
+           "Deleted User ID",
+           "Created At",
+           "Updated At",
+           "Deleted At"
         ];
       }
 
@@ -19,6 +28,6 @@ class PostsExport implements FromCollection, WithHeadings
     */
     public function collection()
     {
-        return Post::select('title', 'description', 'create_user_id', 'created_at')->get();
+        return Post::all();
     }
 }
