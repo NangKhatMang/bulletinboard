@@ -39,9 +39,9 @@ class PostController extends Controller
      */
     public function getUserPost()
     {
-        $userId = Auth::user()->id;
+        $authId = Auth::user()->id;
         $type   = Auth::user()->type;
-        $posts  = $this->postService->getUserPost($userId, $type);
+        $posts  = $this->postService->getUserPost($authId, $type);
         return view('Post.postList', compact('posts'));
     }
 
@@ -52,6 +52,7 @@ class PostController extends Controller
      */
     public function index()
     {
+        session()->forget(['searchKeyword']);
         $posts = $this->postService->getPost();
         return view('Post.postList', compact('posts'));
     }
@@ -85,12 +86,12 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $userId =  Auth::user()->id;
+        $authId =  Auth::user()->id;
         $post   =  new Post;
         $post->title    =  $request->title;
         $post->desc     =  $request->desc;
-        $posts  =  $this->postService->store($userId, $post);
-        return view('Post.postList', compact('posts'));
+        $posts  =  $this->postService->store($authId, $post);
+        return view('Post.postList',compact('posts'))->withSuccess('Post create successfully.');
     }
 
     /**
@@ -103,6 +104,9 @@ class PostController extends Controller
     {
         $searchKeyword = $request->search;
         $posts = $this->postService->searchPost($searchKeyword);
+        session ([
+            'searchKeyword' => $searchKeyword
+        ]);
         return view('Post.postlist', compact('posts'));
     }
 
@@ -125,7 +129,7 @@ class PostController extends Controller
      */
     public function edit($postId)
     {
-        $postDetail = $this->postService->editPost($postId);
+        $postDetail = $this->postService->postDetail($postId);
         return view('Post.edit', compact('postDetail'));
     }
 
@@ -167,7 +171,7 @@ class PostController extends Controller
         $post->title    =  $request->title;
         $post->desc     =  $request->desc;
         $posts  =  $this->postService->update($userId, $post);
-        return view('Post.postList', compact('posts'));
+        return view('Post.postList', compact('posts'))->withSuccess('Post update successfully.');
     }
 
     /**
@@ -185,12 +189,13 @@ class PostController extends Controller
     //export excel
     public function export() 
     {
-        return Excel::download(new PostsExport, 'posts.csv');
+        return Excel::download(new PostsExport, 'posts.xlsx');
     }
 
     //import csv file
     public function import(Request $request) 
     {
+        $authId = Auth::user()->id;
         $validator = Validator::make($request->all(), [
             'file' => 'required|mimes:csv,txt|max:2048'
         ]);
@@ -201,23 +206,7 @@ class PostController extends Controller
         $fileName = $file->getClientOriginalName();
         $file->move('upload', $fileName);
         $filepath = public_path().'/upload/'.$fileName;
-        if (($handle = fopen(public_path().'/upload/'.$fileName, 'r')) !== FALSE) {
-            while (($data = fgetcsv($handle, 1000, ',' )) !== FALSE ) {
-                $post = new Post;
-                $post->id = (int)$data [0];
-                $post->title = $data [1];
-                $post->description = $data [2];
-                $post->status = (int)$data [3];
-                $post->create_user_id = (int)$data [4];
-                $post->updated_user_id = (int)$data [5];
-                $post->deleted_user_id = (int)$data [6];
-                $post->created_at = strtotime($data [7]);
-                $post->updated_at = strtotime($data [8]);
-                //$post->deleted_at = strtotime($data [9]);
-                $post->save ();
-                }
-            fclose($handle);
-        }
-        return redirect()->intended('posts');
+        $import = $this->postService->import($authId, $filepath);
+        return redirect()->intended('posts')->withSuccess('Csv file upload successfully.');
     }
 }

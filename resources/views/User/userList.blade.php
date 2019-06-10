@@ -2,6 +2,32 @@
 
 @section('content')
 <div id="userList">
+    <div class="row">
+        <div class="col-md-11 mx-auto">
+            @if(Session::has('success-changPwd'))
+                <div class="alert alert-dismissible alert-success  alertmessage">
+                    <strong>Success</strong>
+                    <p class="alert {{Session::get('alert-class','alert-success')}} ">{{ Session::get('success-changPwd')}}</p>
+                    <button class="close" type="button" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+        </div><!-- success password change alert -->
+    </div>
+    <div class="row">
+        <div class="col-md-11 mx-auto">
+            @if(Session::has('success'))
+                <div class="alert alert-dismissible alert-success  alertmessage">
+                    <strong>Success</strong>
+                    <p class="alert {{Session::get('alert-class','alert-success')}} ">{{ Session::get('success')}}</p>
+                    <button class="close" type="button" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+        </div><!-- success password change alert -->
+    </div>
     <div class="row mb-3">
         <div class="col">
             <h3>User List</h3>

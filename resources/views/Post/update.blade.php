@@ -2,7 +2,6 @@
 
 @section('content')
 <div id="postEditConfirm">
-
     <div class="row mb-3">
         <div class="col-md-1"></div>
         <div class="col">

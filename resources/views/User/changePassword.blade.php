@@ -10,10 +10,23 @@
     </div>
     <div class="row">
         <div class="col-md-7 mx-auto">
+            @if(Session::has('incorrect'))
+                <div class="alert alert-dismissible alert-warning  alertmessage">
+                    <strong>Incorrect Password!</strong>
+                    <p class="alert {{Session::get('alert-class','alert-danger')}} ">{{ Session::get('incorrect')}}</p>
+                    <button class="close" type="button" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+        </div><!-- incorrect password alert-->
+    </div>
+    <div class="row">
+        <div class="col-md-7 mx-auto">
             <form action="/changePwd/{{$userId}}" method="POST">
             @csrf
                 <div class="form-group row">
-                    <label for="old_password" class="col-md-4">Password</label>
+                    <label for="old_password" class="col-md-4">Enter old password</label>
                     <input type="password" id="old_password" name="old_password" value="{{old('old_password')}}" class="form-control col-md-6">
                     @if ($errors->has('old_password'))    
                         <div class="col-md-4"></div>
@@ -21,7 +34,7 @@
                     @endif
                 </div>
                 <div class="form-group row">
-                    <label for="password" class="col-md-4">Password</label>
+                    <label for="password" class="col-md-4">Enter new password</label>
                     <input type="password" id="password" name="password" value="{{old('password')}}" class="form-control col-md-6">
                     @if ($errors->has('password'))    
                         <div class="col-md-4"></div>
@@ -29,7 +42,7 @@
                     @endif
                 </div>
                 <div class="form-group row">
-                    <label for="password_confirmation" class="col-md-4">Confirm Password</label>
+                    <label for="password_confirmation" class="col-md-4">Confirm new password</label>
                     <input type="password" id="password_confirmation" name="password_confirmation" value="{{old('password_confirmation')}}" class="form-control col-md-6">
                     @if ($errors->has('password_confirmation'))    
                         <div class="col-md-4"></div>

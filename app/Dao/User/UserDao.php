@@ -37,7 +37,7 @@ class UserDao implements UserDaoInterface
    * @param Object
    * @return $posts
    */
-  public function store($userId, $user)
+  public function store($authId, $user)
   {
     $insertUser = new User([
       'name'            =>  $user->name,
@@ -48,8 +48,8 @@ class UserDao implements UserDaoInterface
       'phone'           =>  $user->phone,
       'address'         =>  $user->address,
       'dob'             =>  $user->dob,
-      'create_user_id'  =>  $userId,
-      'updated_user_id' =>  $userId
+      'create_user_id'  =>  $authId,
+      'updated_user_id' =>  $authId
     ]);
     $insertUser->save();
     return redirect()->back();
@@ -89,7 +89,7 @@ class UserDao implements UserDaoInterface
    * @param Object
    * @return $userDetail
    */
-  public function editUser($userId)
+  public function userDetail($userId)
   {
     $userDetail = User::find($userId);
     return $userDetail;
@@ -117,14 +117,21 @@ class UserDao implements UserDaoInterface
   }
 
   /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function showProfile($userId)
-    {
-      $userProfile = User::find($userId);
-        return $userProfile;
+   * Update User, Change Password
+   * @param Object
+   * @return $users
+   */
+  public function changePassword($authId, $userId, $oldPwd, $newPwd)
+  {
+    $updateUser = User::find($userId);
+    $status = Hash::check($oldPwd, $updateUser->password);
+    if ($status) {
+        //var_dump($status);die();
+        $updateUser->password = Hash::make($newPwd);
+        $updateUser->updated_user_id = $authId;
+        $updateUser->updated_at = now();
+        $updateUser->save();
     }
+    return $status;
+  }
 }

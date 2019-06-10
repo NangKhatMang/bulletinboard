@@ -17,7 +17,6 @@ Route::get('/', function () {
 //login
 Route::post('/user/login', 'User\UserController@login');
 Route::get('/user/logout','User\UserController@logout');
-
 //post list
 Route::get('/post/user', 'Post\PostController@getUserPost');
 Route::get('/posts', 'Post\PostController@index');
@@ -52,7 +51,7 @@ Route::get('/user/{userId}', 'User\UserController@edit');
 Route::put('/user/{userId}', 'User\UserController@editConfirm');
 Route::post('/user/{userId}', 'User\UserController@update');
 //change Password
-Route::get('/changePwd/{userId}', 'User\Controller@showPwdForm');
-Route::Post('/changePwd/{userId}', 'User\Controller@changePassword');
+Route::get('/changePwd/{userId}', 'User\UserController@showPwdForm');
+Route::Post('/changePwd/{userId}', 'User\UserController@changePassword');
 //user profile
 Route::get('/user/profile/{userId}', 'User\UserController@showProfile');

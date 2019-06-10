@@ -3,6 +3,19 @@
 @section('content')
 <div id="login">
     <div class="row">
+        <div class="col-md-8 mx-auto">
+            @if(Session::has('incorrect'))
+                <div class="alert alert-dismissible alert-warning  alertmessage">
+                    <strong>Incorrect Password!</strong>
+                    <p class="alert {{Session::get('alert-class','alert-danger')}} ">{{ Session::get('incorrect')}}</p>
+                    <button class="close" type="button" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+        </div><!-- incorrect password alert-->
+    </div>
+    <div class="row">
         <form action="/user/login" method="POST" class="col-md-8 mx-auto border border-primary">
         @csrf
             <div class="row bg-primary mb-5">
@@ -32,13 +45,6 @@
                     <input type="checkbox" id="check" class="form-check-input">
                 </div>
             </div>
-            @if ($errors->has('incorrect'))
-                <div class="form-group row">
-                    <label class="col text-center text-danger">
-                        {{ $errors -> first('incorrect') }} 
-                    </label>
-                </div>
-            @endif
             <div class="form-group">
                 <div class="text-center">
                     <button type="submit" class="btn btn-primary">Login</button>

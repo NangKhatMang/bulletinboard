@@ -41,7 +41,7 @@ class UserController extends Controller
         $pwd        =   $request->password;
         $validator  =   Validator::make($request->all(), [
             'email'     =>  'required|email',
-            'password'  =>  'required',
+            'password'  =>  'required|min:8|regex:/^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/',
         ]);
         if ($validator->fails()) {
             return redirect()->back()
@@ -51,9 +51,7 @@ class UserController extends Controller
         if (Auth::guard('')->attempt(['email' => $email, 'password' => $pwd])) {
             return redirect()->intended('/post/user');
         } else {
-            return redirect()->back()
-                ->withErrors(['incorrect' => "Email and password incorrect!"]);
-            //    ->withinput(Input::all());
+            return redirect()->back()->with('incorrect', 'Email and password incorrect!');
         }
     }
 
@@ -120,7 +118,6 @@ class UserController extends Controller
             $fileName = $profileImg->getClientOriginalName();
             $profileImg->move('img/tempProfile', $fileName);
         }
-
         return view('User.createConfirm', compact(
             'name', 'email','pwd', 'type', 'phone', 'dob', 'address', 'pwdHide', 'fileName'
         ));
@@ -134,7 +131,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $userId    =  Auth::user()->id;
+        $authId    =  Auth::user()->id;
         //save profile image
         $fileName  =  $request->fileName;
         $oldpath   =  public_path().'/img/tempProfile/'.$fileName;
@@ -149,8 +146,8 @@ class UserController extends Controller
         $user->dob      =  $request->dob;
         $user->address  =  $request->address;
         $user->profile  =  '/img/profile/'.$fileName;
-        $insertCommand  =  $this->userService->store($userId, $user);
-        return redirect()->intended('users');
+        $insertCommand  =  $this->userService->store($authId, $user);
+        return redirect()->intended('users')->with('success', 'User create successfully.');
     }
 
     /**
@@ -165,7 +162,7 @@ class UserController extends Controller
         $email = $request->email;
         $dateFrom = $request->dateFrom;
         $dateTo = $request->dateTo;
-        session([
+        session ([
             'name' => $name,
             'email'=> $email,
             'dateFrom' => $dateFrom,
@@ -183,13 +180,8 @@ class UserController extends Controller
      */
     public function showProfile($userId)
     {
-        $userProfile = $this->userService->showProfile($userId);
+        $userProfile = $this->userService->userDetail($userId);
         return view('User.userProfile', compact('userProfile'));
-    }
-
-    public function showPasswordForm($userId)
-    {
-        return view('User.changePassword', compact('$userId'));
     }
 
     /**
@@ -200,7 +192,7 @@ class UserController extends Controller
      */
     public function edit($userId)
     {
-        $userDetail = $this->userService->editUser($userId);
+        $userDetail = $this->userService->userDetail($userId);
         return view('User.edit', compact('userDetail'));
     }
 
@@ -273,7 +265,18 @@ class UserController extends Controller
             $user->profile = $oldProfile;
         }
         $updateCommand  =  $this->userService->update($authId, $user);
-        return redirect()->intended('users');
+        return redirect()->intended('users')->with('success', 'User update successfully.');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showPwdForm($userId)
+    {
+        return view('User.changePassword', compact('userId'));
     }
 
     /**
@@ -286,7 +289,7 @@ class UserController extends Controller
     public function changePassword(Request $request, $userId)
     {
         $validator = Validator::make($request->all(), [
-            'old_password'  =>  'required|min:8|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/',
+            'old_password'  =>  'required|min:8|regex:/^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/',
             'password'  =>  'required|min:8|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/',
             'password_confirmation' => 'required|min:8|regex:/^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/',
         ]);
@@ -295,13 +298,20 @@ class UserController extends Controller
                         ->withErrors($validator)
                         ->withInput();
         }
-        $userDetail = $this->userService->changePassword($userId,);
-        $old_password   =   $request->old_password;
-        if ()
-        $password   =   $request->password;
-        $password_confirmation   =   $request->password_confirmation;
-        
-        return view('Post.update', compact('title', 'desc', 'postId'));
+        $oldPwd   =   $request->old_password;
+        $newPwd   =   $request->password;
+        $authId = Auth::user()->id;
+        $authType = Auth::user()->type;
+        $status = $this->userService->changePassword($authId, $userId, $oldPwd, $newPwd);
+        if ($status) {
+            if ($authType == '0') {
+                return redirect()->intended('users')->with('success-changPwd', 'Password change successfully.');
+            } else {
+                return redirect()->intended('post/user')->with('success-changPwd', 'Password change successfully.');
+            }
+        } else {
+            return redirect()->back()->with('incorrect', 'Old password does not match.');
+        }
     }
 
     /**

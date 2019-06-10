@@ -2,9 +2,37 @@
 
 @section('content')
 <div id="postList">
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-11">
+            @if(Session::has('success-changPwd'))
+                <div class="alert alert-dismissible alert-success  alertmessage">
+                    <strong>Success</strong>
+                    <p class="alert {{Session::get('alert-class','alert-warning')}} ">{{ Session::get('success-changPwd')}}</p>
+                    <button class="close" type="button" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+        </div><!-- success password change alert -->
+    </div>
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-11">
+            @if(!empty($success))
+                <div class="alert alert-dismissible alert-success  alertmessage">
+                    <strong>Success</strong>
+                    <p class="alert {{Session::get('alert-class','alert-success')}} ">{{$success}}</p>
+                    <button class="close" type="button" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+        </div><!-- success alert -->
+    </div>
     <div class="row mb-3">
         <div class="col-md-1"></div>
-        <div class="col">
+        <div class="col-md-11">
             <h3>Post List</h3>
         </div>
     </div>
@@ -12,7 +40,7 @@
         <form action="/posts/search" method="GET" class="form-inline">
             @csrf
             <div class="form-group mb-2">
-                <input type="text" name="search" class="form-control mb-4 mr-3" placeholder="Search...">
+                <input type="text" name="search" value="{{session('searchKeyword')}}" class="form-control mb-4 mr-3" placeholder="Search...">
                 <button type="submit" class="btn btn-primary mb-4 mr-3">Search</button>
                 <a href="/post/create" class="btn btn-primary mb-4 mr-3">Add</a>
                 <a href="/csv/upload" class="btn btn-primary mb-4 mr-3">Upload</a>
@@ -31,7 +59,6 @@
                 <th colspan="2">Action</th>
             </thead>
             <tbody>
-                <?php $i = 1; ?>
                 @foreach($posts as $key => $post)
                 <tr>
                     <td>{{ $posts->firstItem() + $key }}</td>
@@ -48,7 +75,6 @@
                         </form>
                     </td>
                 </tr>
-                <?php $i++; ?>
                 @endforeach
             </tbody>
         </table>

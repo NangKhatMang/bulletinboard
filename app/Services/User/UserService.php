@@ -34,9 +34,9 @@ class UserService implements UserServiceInterface
    * @param Object
    * @return $users
    */
-  public function store($userId, $user)
+  public function store($authId, $user)
   {
-    return $this->userDao->store($userId, $user);
+    return $this->userDao->store($authId, $user);
   }
 
   /**
@@ -54,9 +54,9 @@ class UserService implements UserServiceInterface
    * @param Object
    * @return $userDetail
    */
-  public function editUser($userId)
+  public function userDetail($userId)
   {
-    return $this->userDao->editUser($userId);
+    return $this->userDao->userDetail($userId);
   }
 
   /**
@@ -70,13 +70,12 @@ class UserService implements UserServiceInterface
   }
 
   /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function showProfile($userId)
-    {
-        return $this->userDao->showProfile($userId);
-    }
+   * Update User, Change Password
+   * @param Object
+   * @return $users
+   */
+  public function changePassword($authId, $userId, $oldPwd, $newPwd)
+  {
+    return $this->userDao->changePassword($authId, $userId, $oldPwd, $newPwd);
+  }
 }

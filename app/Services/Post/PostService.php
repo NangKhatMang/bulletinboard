@@ -24,9 +24,9 @@ class PostService implements PostServiceInterface
    * @param Object
    * @return $posts
    */
-  public function getUserPost($userId, $type)
+  public function getUserPost($authId, $type)
   {
-    return $this->postDao->getUserPost($userId, $type);
+    return $this->postDao->getUserPost($authId, $type);
   }
 
   /**
@@ -44,9 +44,9 @@ class PostService implements PostServiceInterface
    * @param Object
    * @return $posts
    */
-  public function store($userId, $post)
+  public function store($authId, $post)
   {
-    return $this->postDao->store($userId, $post);
+    return $this->postDao->store($authId, $post);
   }
 
   /**
@@ -54,9 +54,9 @@ class PostService implements PostServiceInterface
    * @param Object
    * @return $postDetail
    */
-  public function editPost($postId)
+  public function postDetail($postId)
   {
-    return $this->postDao->editPost($postId);
+    return $this->postDao->postDetail($postId);
   }
 
   /**
@@ -77,6 +77,16 @@ class PostService implements PostServiceInterface
   public function searchPost($searchKeyword)
   {
     return $this->postDao->searchPost($searchKeyword);
+  }
+
+  /**
+   * Import csf file
+   * @param Object
+   * @return $posts
+   */
+  public function import($authId, $filepath)
+  {
+    return $this->postDao->import($authId, $filepath);
   }
 
   /**

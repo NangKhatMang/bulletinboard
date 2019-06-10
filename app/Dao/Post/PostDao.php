@@ -14,12 +14,12 @@ class PostDao implements PostDaoInterface
    * @param Object
    * @return $posts
    */
-  public function getUserPost($userId, $type)
+  public function getUserPost($authId, $type)
   {
     if ($type == '0') {
       $posts = Post::orderBy('updated_at','DESC')->paginate(50);
     } else {
-      $posts = Post::where('create_user_id', $userId)
+      $posts = Post::where('create_user_id', $authId)
         ->orderBy('updated_at','DESC')
         ->paginate(50);
     }
@@ -42,7 +42,7 @@ class PostDao implements PostDaoInterface
    * @param Object
    * @return $postDetail
    */
-  public function editPost($postId)
+  public function postDetail($postId)
   {
     $postDetail = Post::find($postId);
     return $postDetail;
@@ -53,16 +53,16 @@ class PostDao implements PostDaoInterface
    * @param Object
    * @return $posts
    */
-  public function store($userId, $post)
+  public function store($authId, $post)
   {
     $insertPost = new Post([
       'title'           =>  $post->title,
       'description'     =>  $post->desc,
-      'create_user_id'  =>  $userId,
-      'updated_user_id' =>  $userId
+      'create_user_id'  =>  $authId,
+      'updated_user_id' =>  $authId
     ]);
     $insertPost->save();
-    $posts = Post::where('create_user_id', $userId)
+    $posts = Post::where('create_user_id', $authId)
         ->orderBy('updated_at','DESC')
         ->paginate(50);
     return $posts;
@@ -103,6 +103,27 @@ class PostDao implements PostDaoInterface
                       ->paginate(50);
     }
     return $posts;
+  }
+
+  /**
+   * Import csf file
+   * @param Object
+   * @return $posts
+   */
+  public function import($authId, $filepath)
+  {
+    if (($handle = fopen($filepath, 'r')) !== FALSE) {
+      while (($data = fgetcsv($handle, 1000, ',' )) !== FALSE ) {
+          $post = new Post;
+          $post->title = $data [0];
+          $post->description = $data [1];
+          $post->create_user_id = $authId;
+          $post->updated_user_id = $authId;
+          $post->save ();
+          }
+      fclose($handle);
+    }
+    return back();
   }
 
   /**
