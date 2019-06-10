@@ -10,11 +10,11 @@ use Log;
 class PostDao implements PostDaoInterface
 {
   /**
-   * Get User's Post List
+   * Get Posts List
    * @param Object
    * @return $posts
    */
-  public function getUserPost($authId, $type)
+  public function getPost($authId, $type)
   {
     if ($type == '0') {
       $posts = Post::orderBy('updated_at','DESC')->paginate(50);
@@ -23,17 +23,6 @@ class PostDao implements PostDaoInterface
         ->orderBy('updated_at','DESC')
         ->paginate(50);
     }
-    return $posts;
-  }
-
-  /**
-   * Get Posts List
-   * @param Object
-   * @return $posts
-   */
-  public function getPost()
-  {
-    $posts = Post::orderBy('updated_at','DESC')->paginate(50);
     return $posts;
   }
 
@@ -127,12 +116,16 @@ class PostDao implements PostDaoInterface
   }
 
   /**
-   * Delete Post
+   * Soft Delete Post
    * @param Object
    * @return $posts
    */
-  public function destory($userId, $postId)
+  public function softDelete($authId, $postId)
   {
-    return Post::find($postId)->delete();
+    $deletePost = Post::withTrashed()
+                      ->where('id', $postId)
+                      ->get();
+    // var_dump($deletePost);die();    
+    return back();
   }
 }

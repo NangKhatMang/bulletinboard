@@ -37,23 +37,12 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getUserPost()
+    public function index()
     {
         $authId = Auth::user()->id;
         $type   = Auth::user()->type;
-        $posts  = $this->postService->getUserPost($authId, $type);
-        return view('Post.postList', compact('posts'));
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
         session()->forget(['searchKeyword']);
-        $posts = $this->postService->getPost();
+        $posts = $this->postService->getPost($authId, $type);
         return view('Post.postList', compact('posts'));
     }
 
@@ -180,10 +169,10 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($postId)
+    public function softDelete($postId)
     {
-        $userId = Auth::user()->id;
-        $deletePost = $this->postService->destory($userId, $postId);
+        $authId = Auth::user()->id;
+        $deletePost = $this->postService->softDelete($authId, $postId);
         return redirect()->intended('posts');
     }
     //export excel

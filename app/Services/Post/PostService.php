@@ -20,23 +20,13 @@ class PostService implements PostServiceInterface
   }
 
   /**
-   * Get User's Post List
-   * @param Object
-   * @return $posts
-   */
-  public function getUserPost($authId, $type)
-  {
-    return $this->postDao->getUserPost($authId, $type);
-  }
-
-  /**
    * Get Posts List
    * @param Object
    * @return $posts
    */
-  public function getPost()
+  public function getPost($authId, $type)
   {
-    return $this->postDao->getPost();
+    return $this->postDao->getPost($authId, $type);
   }
 
   /**
@@ -90,12 +80,12 @@ class PostService implements PostServiceInterface
   }
 
   /**
-   * Delete Post
+   * Soft Delete Post
    * @param Object
    * @return $posts
    */
-  public function destory($userId, $postId)
+  public function softDelete($authId, $postId)
   {
-    return $this->postDao->destory($userId, $postId);
+    return $this->postDao->softDelete($authId, $postId);
   }
 }

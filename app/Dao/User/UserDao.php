@@ -102,6 +102,9 @@ class UserDao implements UserDaoInterface
    */
   public function update($authId, $user)
   {
+    if ($user->profile == null) {
+      $user->profile = "";
+    }
     $updateUser = User::find($user->id);
     $updateUser->name = $user->name;
     $updateUser->email = $user->email;
@@ -126,7 +129,6 @@ class UserDao implements UserDaoInterface
     $updateUser = User::find($userId);
     $status = Hash::check($oldPwd, $updateUser->password);
     if ($status) {
-        //var_dump($status);die();
         $updateUser->password = Hash::make($newPwd);
         $updateUser->updated_user_id = $authId;
         $updateUser->updated_at = now();

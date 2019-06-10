@@ -18,7 +18,6 @@ Route::get('/', function () {
 Route::post('/user/login', 'User\UserController@login');
 Route::get('/user/logout','User\UserController@logout');
 //post list
-Route::get('/post/user', 'Post\PostController@getUserPost');
 Route::get('/posts', 'Post\PostController@index');
 //post create
 Route::get('/post/create', 'Post\PostController@showRegisterForm');
@@ -31,7 +30,7 @@ Route::post('/post/{postId}', 'Post\PostController@update');
 //posts search
 Route::get('/posts/search', 'Post\PostController@search');
 //post delete
-// Route::delete('/post/{postId}', 'Post\PostController@destroy');
+Route::delete('/post/{postId}', 'Post\PostController@softDelete');
 //export excel
 Route::get('/download', 'Post\PostController@export');
 //import csv file

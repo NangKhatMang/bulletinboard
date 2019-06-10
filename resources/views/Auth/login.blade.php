@@ -38,11 +38,9 @@
                 @endif
             </div>
             <div class="form-group row">
-                <div class="col-md-4">
-                    <label for="check" class="form-check-label">Remember Me</label>
-                </div>
-                <div class="col-md-6 form-check">
-                    <input type="checkbox" id="check" class="form-check-input">
+                <label for="check" class="col-4 form-check-label">Remember Me</label>
+                <div class="col-8">
+                    <input type="checkbox" id="check" class="form-check-input ml-1">
                 </div>
             </div>
             <div class="form-group">

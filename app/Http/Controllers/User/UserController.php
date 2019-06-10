@@ -49,7 +49,7 @@ class UserController extends Controller
                         ->withInput();
         }
         if (Auth::guard('')->attempt(['email' => $email, 'password' => $pwd])) {
-            return redirect()->intended('/post/user');
+            return redirect()->intended('/posts');
         } else {
             return redirect()->back()->with('incorrect', 'Email and password incorrect!');
         }
@@ -134,9 +134,15 @@ class UserController extends Controller
         $authId    =  Auth::user()->id;
         //save profile image
         $fileName  =  $request->fileName;
-        $oldpath   =  public_path().'/img/tempProfile/'.$fileName;
-        $newpath   =  public_path().'/img/profile/'.$fileName;
-        File::move($oldpath, $newpath);
+        if ($fileName) {
+            $oldpath    =  public_path().'/img/tempProfile/'.$fileName;
+            $newpath    =  public_path().'/img/profile/'.$fileName;
+            File::move($oldpath, $newpath);
+            $profile    =  '/img/profile/'.$fileName;
+        } else {
+            $profile    =  '';
+        }
+        
         $user           =  new User;
         $user->name     =  $request->user_name;
         $user->email    =  $request->email;
@@ -145,7 +151,9 @@ class UserController extends Controller
         $user->phone    =  $request->phone;
         $user->dob      =  $request->dob;
         $user->address  =  $request->address;
-        $user->profile  =  '/img/profile/'.$fileName;
+        $user->profile  =  $profile;
+        
+        
         $insertCommand  =  $this->userService->store($authId, $user);
         return redirect()->intended('users')->with('success', 'User create successfully.');
     }
@@ -265,7 +273,7 @@ class UserController extends Controller
             $user->profile = $oldProfile;
         }
         $updateCommand  =  $this->userService->update($authId, $user);
-        return redirect()->intended('users')->with('success', 'User update successfully.');
+        return redirect()->intended('posts')->with('success', 'User update successfully.');
     }
 
     /**
@@ -305,9 +313,7 @@ class UserController extends Controller
         $status = $this->userService->changePassword($authId, $userId, $oldPwd, $newPwd);
         if ($status) {
             if ($authType == '0') {
-                return redirect()->intended('users')->with('success-changPwd', 'Password change successfully.');
-            } else {
-                return redirect()->intended('post/user')->with('success-changPwd', 'Password change successfully.');
+                return redirect()->intended('posts')->with('success-changPwd', 'Password change successfully.');
             }
         } else {
             return redirect()->back()->with('incorrect', 'Old password does not match.');
