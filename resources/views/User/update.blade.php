@@ -16,7 +16,7 @@
                         src="@if($user->profile)/img/tempProfile/{{$user->profile}} @else {{$old_profile}} @endif">
                 </div>
             </div>
-            <form action="/user/{{$userId}}" method="POST">
+            <form action="/user/{{$user_id}}" method="POST">
                 @csrf
                 <input type="hidden" name="oldProfile" value="{{$old_profile}}">
                 <input type="hidden" name="newProfile" value="{{$user->profile}}">
@@ -55,7 +55,7 @@
                 <div class="form-group">
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary  mr-4">Update</button>
-                        <a href="/user/{{$userId}}" class="btn btn-white">Cancel</a>
+                        <a href="/user/{{$user_id}}" class="btn btn-white">Cancel</a>
                     </div>
                 </div>
             </form>

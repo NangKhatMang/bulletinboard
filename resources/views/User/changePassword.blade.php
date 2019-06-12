@@ -11,7 +11,7 @@
     <div class="row">
         <div class="col-md-7 mx-auto">
             @if(Session::has('incorrect'))
-                <div class="alert alert-dismissible alert-warning  alertmessage">
+                <div class="alert alert-dismissible alert-warning  alertmessage text-danger">
                     <strong>Incorrect Password!</strong>
                     <p class="alert {{Session::get('alert-class','alert-danger')}} ">{{ Session::get('incorrect')}}</p>
                     <button class="close" type="button" data-dismiss="alert" aria-label="Close">
@@ -23,7 +23,7 @@
     </div>
     <div class="row">
         <div class="col-md-7 mx-auto">
-            <form action="/changePwd/{{$userId}}" method="POST">
+            <form action="/changePwd/{{$user_id}}" method="POST">
             @csrf
                 <div class="form-group row">
                     <label for="old_password" class="col-md-4">Enter old password</label>

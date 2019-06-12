@@ -54,9 +54,9 @@ class UserService implements UserServiceInterface
    * @param Object
    * @return $userDetail
    */
-  public function userDetail($userId)
+  public function userDetail($user_id)
   {
-    return $this->userDao->userDetail($userId);
+    return $this->userDao->userDetail($user_id);
   }
 
   /**
@@ -74,9 +74,9 @@ class UserService implements UserServiceInterface
    * @param Object
    * @return $users
    */
-  public function changePassword($auth_id, $userId, $old_pwd, $new_pwd)
+  public function changePassword($auth_id, $user_id, $old_pwd, $new_pwd)
   {
-    return $this->userDao->changePassword($auth_id, $userId, $old_pwd, $new_pwd);
+    return $this->userDao->changePassword($auth_id, $user_id, $old_pwd, $new_pwd);
   }
 
   /**

@@ -47,10 +47,10 @@ class PostController extends Controller
     public function index()
     {
         $auth_id = Auth::user()->id;
-        $type   = Auth::user()->type;
+        $type    = Auth::user()->type;
         session()->forget([
-            'searchKeyword',
-            'title',
+            'searchKeyword', 
+            'title', 
             'desc'
         ]);
         $posts = $this->postService->getPost($auth_id, $type);
@@ -65,8 +65,8 @@ class PostController extends Controller
     public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'title' =>  'required|max:255',
-            'desc'  =>  'required',
+            'title' =>  'required|max:255', 
+            'desc'  =>  'required'
         ]);
         if ($validator->fails()) {
             return redirect()->back()
@@ -76,7 +76,7 @@ class PostController extends Controller
         $title  =  $request->title;
         $desc   =  $request->desc;
         session([
-            'title' => $title,
+            'title' => $title, 
             'desc'  => $desc
         ]);
         return view('Post.createConfirm', compact('title', 'desc'));
@@ -91,11 +91,11 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $auth_id =  Auth::user()->id;
-        $post   =  new Post;
-        $post->title    =  $request->title;
-        $post->desc     =  $request->desc;
-        $posts  =  $this->postService->store($auth_id, $post);
-        return view('Post.postList',compact('posts'))->withSuccess('Post create successfully.');
+        $post    =  new Post;
+        $post->title = $request->title;
+        $post->desc  = $request->desc;
+        $posts   =  $this->postService->store($auth_id, $post);
+        return view('Post.postList', compact('posts'))->withSuccess('Post create successfully.');
     }
 
     /**
@@ -106,8 +106,10 @@ class PostController extends Controller
      */
     public function search(Request $request)
     {
+        $auth_id   = Auth::user()->id;
+        $auth_type = Auth::user()->type;
         $search_keyword = $request->search;
-        $posts = $this->postService->searchPost($search_keyword);
+        $posts     = $this->postService->searchPost($search_keyword, $auth_id, $auth_type);
         session ([
             'searchKeyword' => $search_keyword
         ]);
@@ -120,12 +122,12 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($postId)
+    public function show($post_id)
     {
-        $post = Post::find($postId);
+        $post = Post::find($post_id);
         $user = User::where('id', '=', $post->create_user_id)
-                    ->select('name')
-                    ->first();
+            ->select('name')
+            ->first();
         return response()->json(['post' => $post, 'user' => $user]);
     }
 
@@ -135,9 +137,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($postId)
+    public function edit($post_id)
     {
-        $post_detail = $this->postService->postDetail($postId);
+        $post_detail = $this->postService->postDetail($post_id);
         return view('Post.edit', compact('post_detail'));
     }
 
@@ -148,20 +150,20 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function editConfirm(Request $request, $postId)
+    public function editConfirm(Request $request, $post_id)
     {
         $title  =   $request->title;
         $desc   =   $request->desc;
-        $validator = Validator::make($request->all(), [
-            'title' =>  'required|max:255',
-            'desc'  =>  'required',
+        $validator  = Validator::make($request->all(), [
+            'title' =>  'required|max:255', 
+            'desc'  =>  'required'
         ]);
         if ($validator->fails()) {
             return redirect()->back()
                         ->withErrors($validator)
                         ->withInput();
         }
-        return view('Post.update', compact('title', 'desc', 'postId'));
+        return view('Post.update', compact('title', 'desc', 'post_id'));
     }
 
     /**
@@ -171,14 +173,14 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $postId)
+    public function update(Request $request, $post_id)
     {
-        $user_id =   Auth::user()->id;
-        $post   =   new Post;
-        $post->id       =  $postId;
-        $post->title    =  $request->title;
-        $post->desc     =  $request->desc;
-        $posts  =  $this->postService->update($user_id, $post);
+        $user_id  =  Auth::user()->id;
+        $post     =  new Post;
+        $post->id     =  $post_id;
+        $post->title  =  $request->title;
+        $post->desc   =  $request->desc;
+        $posts    =  $this->postService->update($user_id, $post);
         return view('Post.postList', compact('posts'))->withSuccess('Post update successfully.');
     }
 
@@ -190,10 +192,10 @@ class PostController extends Controller
      */
     public function destroy(Request $request)
     {
-        $post_id = $request->postId;
+        $post_id = $request->post_id;
         $auth_id = Auth::user()->id;
         $delete_post = $this->postService->softDelete($auth_id, $post_id);
-        return redirect()->intended('posts');
+        return redirect()->intended('posts')->withSuccess('Post delete successfully.');
     }
     /**
      * export excel file
@@ -208,12 +210,12 @@ class PostController extends Controller
     /**
      * import excel file
      *
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function import(Request $request) 
     {
-        $auth_id = Auth::user()->id;
+        $auth_id   = Auth::user()->id;
         $validator = Validator::make($request->all(), [
             'file' => 'required|max:2048'
         ]);
@@ -229,7 +231,7 @@ class PostController extends Controller
         //upload csv file
         $fileName = $file->getClientOriginalName();
         $file->move('upload', $fileName);
-        $filepath = public_path().'/upload/'.$fileName;
+        $filepath = public_path() . '/upload/' . $fileName;
 
         $import_csv_file = $this->postService->import($auth_id, $filepath);
         return redirect()->intended('posts')->withSuccess('Csv file upload successfully.');

@@ -15,10 +15,10 @@ class PostDao implements PostDaoInterface
   public function getPost($auth_id, $type)
   {
     if ($type == '0') {
-      $posts = Post::orderBy('updated_at','DESC')->paginate(50);
+      $posts = Post::orderBy('updated_at', 'DESC')->paginate(50);
     } else {
       $posts = Post::where('create_user_id', $auth_id)
-        ->orderBy('updated_at','DESC')
+        ->orderBy('updated_at', 'DESC')
         ->paginate(50);
     }
     return $posts;
@@ -29,9 +29,9 @@ class PostDao implements PostDaoInterface
    * @param Object
    * @return $postDetail
    */
-  public function postDetail($postId)
+  public function postDetail($post_id)
   {
-    $post_detail = Post::find($postId);
+    $post_detail = Post::find($post_id);
     return $post_detail;
   }
 
@@ -43,15 +43,15 @@ class PostDao implements PostDaoInterface
   public function store($auth_id, $post)
   {
     $insert_post = new Post([
-      'title'           =>  $post->title,
-      'description'     =>  $post->desc,
-      'create_user_id'  =>  $auth_id,
+      'title'           =>  $post->title, 
+      'description'     =>  $post->desc, 
+      'create_user_id'  =>  $auth_id, 
       'updated_user_id' =>  $auth_id
     ]);
     $insert_post->save();
     $posts = Post::where('create_user_id', $auth_id)
-        ->orderBy('updated_at','DESC')
-        ->paginate(50);
+      ->orderBy('updated_at', 'DESC')
+      ->paginate(50);
     return $posts;
   }
 
@@ -69,8 +69,8 @@ class PostDao implements PostDaoInterface
     $update_post->updated_at       =  now();
     $update_post->save();
     $posts = Post::where('create_user_id', $user_id)
-                  ->orderBy('updated_at','DESC')
-                  ->paginate(50);
+      ->orderBy('updated_at', 'DESC')
+      ->paginate(50);
     return $posts;
   }
 
@@ -79,17 +79,30 @@ class PostDao implements PostDaoInterface
    * @param Object
    * @return $posts
    */
-  public function searchPost($search_keyword)
+  public function searchPost($search_keyword, $auth_id, $auth_type)
   {
-    if ($search_keyword == null) {
-      $posts = Post::orderBy('updated_at','DESC')->paginate(50);
+    if ($auth_type == 0) {
+      if ($search_keyword == null) {
+        $posts = Post::orderBy('updated_at', 'DESC')->paginate(50);
+      } else {
+          $posts = Post::where('title', 'LIKE', '%' . $search_keyword . '%')
+            ->orwhere('description', 'LIKE', '%' . $search_keyword . '%')
+            ->orderBy('updated_at', 'DESC')
+            ->paginate(50);
+      }
     } else {
-        $posts = Post::where('title', 'LIKE', '%' . $search_keyword . '%')
-                      ->orwhere('description', 'LIKE', '%' . $search_keyword . '%')
-                      ->orderBy('updated_at','DESC')
-                      ->paginate(50);
+        if ($search_keyword == null) {
+          $posts = Post::where('create_user_id', '=', $auth_id)
+            ->orderBy('updated_at', 'DESC')->paginate(50);
+        } else {
+            $posts = Post::where('title', 'LIKE', '%' . $search_keyword . '%')
+              ->orwhere('description', 'LIKE', '%' . $search_keyword . '%')
+              ->where('create_user_id', '=', $auth_id)
+              ->orderBy('updated_at', 'DESC')
+              ->paginate(50);
+        }
     }
-    return $posts;
+    return $posts;    
   }
 
   /**
@@ -100,14 +113,14 @@ class PostDao implements PostDaoInterface
   public function import($auth_id, $filepath)
   {
     if (($handle = fopen($filepath, 'r')) !== FALSE) {
-      while (($data = fgetcsv($handle, 1000, ',' )) !== FALSE ) {
-          $post = new Post;
-          $post->title = $data [0];
-          $post->description = $data [1];
-          $post->create_user_id = $auth_id;
-          $post->updated_user_id = $auth_id;
-          $post->save ();
-          }
+      while (($data = fgetcsv($handle, 1000, ',')) !== FALSE ) {
+        $post = new Post;
+        $post->title = $data [0];
+        $post->description     = $data [1];
+        $post->create_user_id  = $auth_id;
+        $post->updated_user_id = $auth_id;
+        $post->save ();
+      }
       fclose($handle);
     }
     return back();

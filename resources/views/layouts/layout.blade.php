@@ -17,7 +17,7 @@
         <header>
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-5">
                 <div class="container">
-                    <a class="navbar-brand" href="#">SCM Bullletin Board</a>
+                    <h3 class="navbar-brand">SCM Bullletin Board</h3>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <i class="fas fa-bars"></i>
                     </button>
@@ -42,7 +42,7 @@
                             <!-- nav right -->
                             <ul class="navbar-nav ">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">{{Auth::user()->name}}</a>
+                                    <p class="nav-link">{{Auth::user()->name}}</p>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="/user/logout">Logout</a>
@@ -61,45 +61,6 @@
     </div><!-- /.wrapper -->
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
-    <script>
-        $(document).ready(function(){
-            $('.postDetail').click(function(){
-                var postId = $(this).data('id');
-                // alert(postId);
-
-                $.ajax({
-                    url:'/post/show/'+postId,
-                    method:'GET',
-                    dataType:'json',
-                    success:function(data){
-                        console.log(data);
-                        $('#postDetailModal').modal('show');
-                        $('#post-title').html(data.post.title);
-                        $('#posted-date').html('posted at - '+data.post.created_at);
-                        $('#post-desc').html(data.post.description);
-                        $('#posted-user').html('- by '+data.user.name+' -');
-                    }
-                });
-            });
-        });
-        $('.postDelete').click(function(){
-            var postId = $(this).data('id');
-            $.ajax({
-                type:"GET",
-                success:function(){
-                $("#post_id").val(postId);
-                },
-            })
-        });
-        $('.userDelete').click(function(){
-            var usertId = $(this).data('id');
-            $.ajax({
-                type:"GET",
-                success:function(){
-                $("#user_id").val(usertId);
-                },
-            })
-        });
-    </script>
+    <script src="{{ asset('js/custom.js') }}"></script>
 </body>
 </html>

@@ -10,7 +10,7 @@
     </div>
     <div class="row">
         <div class="col-md-8 mx-auto">
-            <form action="/post/{{$postId}}" method="POST">
+            <form action="/post/{{$post_id}}" method="POST">
                 @csrf
                 <div class="form-group">
                     <label >Title</label>
@@ -31,7 +31,7 @@
                 <div class="form-group">
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary  mr-4">Update</button>
-                        <a href="/post/{{$postId}}" class="btn btn-white">Cancel</a>
+                        <a href="/post/{{$post_id}}" class="btn btn-white">Cancel</a>
                     </div>
                 </div>
             </form>

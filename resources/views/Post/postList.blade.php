@@ -22,7 +22,7 @@
             @if(!empty($success))
                 <div class="alert alert-dismissible alert-success  alertmessage">
                     <strong>Success</strong>
-                    <p class="alert {{Session::get('alert-class','alert-success')}} ">{{$success}}</p>
+                    <p class="alert {{Session::get('alert-class','alert-warning')}} ">{{$success}}</p>
                     <button class="close" type="button" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -116,7 +116,7 @@
                     <form action="/post" method="POST">
                         @csrf
                         @method('DELETE')
-                        <input type="hidden" id="post_id" name="postId">
+                        <input type="hidden" id="post_id" name="post_id">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                         <button class="btn btn-danger" type="submit">Delete</button>
                     </form>

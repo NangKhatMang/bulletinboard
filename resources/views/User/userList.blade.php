@@ -20,7 +20,7 @@
             @if(Session::has('success'))
                 <div class="alert alert-dismissible alert-success  alertmessage">
                     <strong>Success</strong>
-                    <p class="alert {{Session::get('alert-class','alert-success')}} ">{{ Session::get('success')}}</p>
+                    <p class="alert {{Session::get('alert-class','alert-warning')}} ">{{ Session::get('success')}}</p>
                     <button class="close" type="button" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -35,13 +35,16 @@
     </div>
     <div class="row justify-content-center">
         <form action="/user/search" method="GET" class="form-inline">
-            <input type="text" name="name" value="{{session('name')}}" class="form-control mb-4 mr-3" placeholder="Name">
-            <input type="text" name="email" value="{{session('email')}}" class="form-control mb-4 mr-3" placeholder="Email">
-            <input type="text" name="dateFrom" value="{{session('date_from')}}" onfocus="(this.type='date')" onblur="if(this.value==''){this.type='text'}" class="form-control mb-4 mr-3" placeholder="Created From">
-            <input type="text" name="dateTo" value="{{session('date_to')}}" onfocus="(this.type='date')" onblur="if(this.value==''){this.type='text'}" class="form-control mb-4 mr-3" placeholder="Created To">
+            <input type="text" name="name" value="{{session('search_name')}}" class="form-control mb-4 mr-3" placeholder="Name">
+            <input type="text" name="email" value="{{session('search_email')}}" class="form-control mb-4 mr-3" placeholder="Email">
+            <input type="text" name="dateFrom" value="{{session('search_date_from')}}" onfocus="(this.type='date')" onblur="if(this.value==''){this.type='text'}" class="form-control mb-4 mr-3" placeholder="Created From">
+            <input type="text" name="dateTo" value="{{session('search_date_to')}}" onfocus="(this.type='date')" onblur="if(this.value==''){this.type='text'}" class="form-control mb-4 mr-3" placeholder="Created To">
             <button type="submit" class="btn btn-primary mb-4 mr-3">Search</button>
             <a href="/user/create" class="btn btn-primary mb-4 mr-3">Add</a>
         </form>
+        @if ($errors->has('email'))    
+            <div class="mb-4 text-danger">{{ $errors->first('email') }}</div>
+        @endif
     </div>
     <div class="row">
         <table class="table table-responsive-md table-striped table-bordered text-center col-md-11 mx-auto">
@@ -98,7 +101,7 @@
                     <form action="/user" method="POST">
                         @csrf
                         @method('DELETE')
-                        <input type="hidden" id="user_id" name="userId">
+                        <input type="hidden" id="user_id" name="user_id">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                         <button class="btn btn-danger" type="submit">Delete</button>
                     </form>

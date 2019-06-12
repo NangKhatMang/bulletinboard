@@ -17,14 +17,14 @@ class UserDao implements UserDaoInterface
   public function getUser()
   {
     $users = User::select(
-      'users.name',
-      'users.email',
-      'users.phone',
-      'users.dob',
-      'users.address',
-      'users.created_at',
-      'users.updated_at',
-      'users.id',
+      'users.name', 
+      'users.email', 
+      'users.phone', 
+      'users.dob', 
+      'users.address', 
+      'users.created_at', 
+      'users.updated_at', 
+      'users.id', 
       'u1.name as created_user_name')
       ->join('users as u1', 'u1.id', 'users.create_user_id')
       ->orderBy('users.updated_at', 'DESC')
@@ -40,15 +40,15 @@ class UserDao implements UserDaoInterface
   public function store($auth_id, $user)
   {
     $insert_user = new User([
-      'name'            =>  $user->name,
-      'email'           =>  $user->email,
-      'password'        =>  $user->password,
-      'profile'         =>  $user->profile,
-      'type'            =>  $user->type,
-      'phone'           =>  $user->phone,
-      'address'         =>  $user->address,
-      'dob'             =>  $user->dob,
-      'create_user_id'  =>  $auth_id,
+      'name'            =>  $user->name, 
+      'email'           =>  $user->email, 
+      'password'        =>  $user->password, 
+      'profile'         =>  $user->profile, 
+      'type'            =>  $user->type, 
+      'phone'           =>  $user->phone, 
+      'address'         =>  $user->address, 
+      'dob'             =>  $user->dob, 
+      'create_user_id'  =>  $auth_id, 
       'updated_user_id' =>  $auth_id
     ]);
     $insert_user->save();
@@ -62,22 +62,55 @@ class UserDao implements UserDaoInterface
    */
   public function searchUser($name, $email, $date_from, $date_to)
   {
-    if ($name == null && $email == null && $date_from == null & $date_to == null) {
-      $users = User::orderBy('updated_at', 'DESC')->paginate(50);
+    if ($name == null && $email == null && $date_from == null && $date_to == null) {
+      $users = User::select(
+        'users.name', 
+        'users.email', 
+        'users.phone', 
+        'users.dob', 
+        'users.address', 
+        'users.created_at', 
+        'users.updated_at', 
+        'users.id', 
+        'u1.name as created_user_name')
+        ->join('users as u1', 'u1.id', 'users.create_user_id')
+        ->orderBy('users.updated_at', 'DESC')
+        ->paginate(50);
     } else {
         if ((isset($name) || isset($email)) &&
             (is_null($date_from) && is_null($date_to))) {
-                $users = User::where([
-                    ['name', 'LIKE', '%' . $name . '%'],
-                    ['email', 'LIKE', '%' . $email . '%']
-                ])->orderBy('updated_at', 'DESC')->paginate(50);
+                $users = User::select(
+                  'users.name', 
+                  'users.email', 
+                  'users.phone', 
+                  'users.dob', 
+                  'users.address', 
+                  'users.created_at', 
+                  'users.updated_at', 
+                  'users.id', 
+                  'u1.name as created_user_name')
+                  ->where('users.name', 'LIKE', '%' . $name . '%')
+                  ->where('users.email', 'LIKE', '%' . $email . '%')
+                  ->join('users as u1', 'u1.id', 'users.create_user_id')
+                  ->orderBy('users.updated_at', 'DESC')
+                  ->paginate(50);
         } elseif ((isset($name) || isset($email)) ||
             (isset($date_from) && isset($date_to))) {
-                $users = User::where([
-                    ['name', 'LIKE', '%' . $name . '%'],
-                    ['email', 'LIKE', '%' . $email . '%']
-                ])->whereBetween('created_at', array($date_from,$date_to))
-                  ->orderBy('updated_at', 'DESC')
+                $users = User::select(
+                  'users.name', 
+                  'users.email', 
+                  'users.phone', 
+                  'users.dob', 
+                  'users.address', 
+                  'users.created_at', 
+                  'users.updated_at', 
+                  'users.id', 
+                  'u1.name as created_user_name')
+                  ->join('users as u1', 'u1.id', 'users.create_user_id')
+                  ->where('users.name', 'LIKE', '%' . $name . '%')
+                  ->where('users.email', 'LIKE', '%' . $email . '%')
+                  ->whereBetween('users.created_at', array($date_from, $date_to))
+                  ->orderBy('users.updated_at', 'DESC')
                   ->paginate(50);
         }
     }
@@ -89,9 +122,9 @@ class UserDao implements UserDaoInterface
    * @param Object
    * @return $userDetail
    */
-  public function userDetail($userId)
+  public function userDetail($user_id)
   {
-    $user_detail = User::find($userId);
+    $user_detail = User::find($user_id);
     return $user_detail;
   }
 
@@ -124,12 +157,12 @@ class UserDao implements UserDaoInterface
    * @param Object
    * @return $users
    */
-  public function changePassword($auth_id, $userId, $old_pwd, $new_pwd)
+  public function changePassword($auth_id, $user_id, $old_pwd, $new_pwd)
   {
-    $update_user = User::find($userId);
+    $update_user = User::find($user_id);
     $status = Hash::check($old_pwd, $update_user->password);
     if ($status) {
-        $update_user->password = Hash::make($new_pwd);
+        $update_user->password   = Hash::make($new_pwd);
         $update_user->updated_user_id = $auth_id;
         $update_user->updated_at = now();
         $update_user->save();
@@ -149,10 +182,10 @@ class UserDao implements UserDaoInterface
     $user_delete->deleted_at = now();
     $user_delete->save();
 
-    $postDelete = Post::where('create_user_id','=',$user_id)
+    $postDelete = Post::where('create_user_id', '=', $user_id)
       ->update([
-        'deleted_user_id' => $auth_id,
-        'deleted_at'      => now(),
+        'deleted_user_id' => $auth_id, 
+        'deleted_at'      => now()
       ]);
     return back();
   }

@@ -50,10 +50,11 @@ class UserController extends Controller
                         ->withErrors($validator)
                         ->withInput();
         }
-        if (Auth::guard('')->attempt(['email' => $email, 'password' => $pwd])) {
+        if (Auth::guard('')->attempt(['email' => $email, 'password' => $pwd, 'deleted_at' => null])) {
             return redirect()->intended('/posts');
         } else {
-            return redirect()->back()->with('incorrect', 'Email and password incorrect!');
+            return redirect()->back()
+                        ->with('incorrect', 'Email and password incorrect!');
         }
     }
 
@@ -78,14 +79,16 @@ class UserController extends Controller
     public function index()
     {
         session()->forget([
-            'name',
-            'email',
-            'type',
-            'phone',
-            'dob',
-            'address',
-            'date_from',
-            'date_to'
+            'name', 
+            'email', 
+            'type', 
+            'phone', 
+            'dob', 
+            'address', 
+            'search_name', 
+            'search_email', 
+            'search_date_from', 
+            'search_date_to'
         ]);
         $users = $this->userService->getUser();
         return view('User.userList', compact('users'));
@@ -99,12 +102,12 @@ class UserController extends Controller
     public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'user_name'  =>  'required',
-            'email'     =>  'required|email|unique:users,email',
-            'password'  =>  'required|min:8|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/',
-            'password_confirmation' => 'required|min:8|regex:/^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/',
-            'phone'     =>  'required|numeric|regex:/(09)[0-9]{7}/',
-            'profileImg'   =>  'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'user_name'  =>  'required', 
+            'email'     =>  'required|email|unique:users,email', 
+            'password'  =>  'required|min:8|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/', 
+            'password_confirmation' => 'required|min:8|regex:/^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/', 
+            'phone'     =>  'required|numeric|regex:/(09)[0-9]{7}/', 
+            'profileImg'   =>  'image|mimes:jpeg,png,jpg,gif,svg|max:2048', 
         ]);
         if ($validator->fails()) {
             return redirect()->back()
@@ -118,7 +121,7 @@ class UserController extends Controller
         $phone   =  $request->phone;
         $dob     =  $request->dob;
         $address =  $request->address;
-        $profile_img   =  $request->file('profileImg');
+        $profile_img = $request->file('profileImg');
 
         //password show as ***
         $hide = "*";
@@ -130,11 +133,11 @@ class UserController extends Controller
             $profile_img->move('img/tempProfile', $filename);
         }
         session ([
-            'name' => $name,
-            'email'=> $email,
-            'type' => $type,
-            'phone' => $phone,
-            'dob' => $dob,
+            'name'  => $name, 
+            'email' => $email, 
+            'type'  => $type, 
+            'phone' => $phone, 
+            'dob'   => $dob, 
             'address' => $address
         ]);
         return view('User.createConfirm', compact(
@@ -154,10 +157,10 @@ class UserController extends Controller
         //save profile image
         $filename  =  $request->filename;
         if ($filename) {
-            $oldpath    =  public_path().'/img/tempProfile/'.$filename;
-            $newpath    =  public_path().'/img/profile/'.$filename;
+            $oldpath    =  public_path() . '/img/tempProfile/' . $filename;
+            $newpath    =  public_path() . '/img/profile/' . $filename;
             File::move($oldpath, $newpath);
-            $profile    =  '/img/profile/'.$filename;
+            $profile    =  '/img/profile/' . $filename;
         } else {
             $profile    =  '';
         }
@@ -185,15 +188,25 @@ class UserController extends Controller
      */
     public function search(Request $request)
     {
-        $name = $request->name;
-        $email = $request->email;
+        $name      = $request->name;
+        $email     = $request->email;
         $date_from = $request->dateFrom;
-        $date_to = $request->dateTo;
+        $date_to   = $request->dateTo;
+        if ($email) {
+            $validator = Validator::make($request->all(), [
+                'email' => 'email'
+            ]);
+            if ($validator->fails()) {
+                return redirect()->back()
+                        ->withErrors($validator)
+                        ->withInput();
+            }
+        }
         session ([
-            'name' => $name,
-            'email'=> $email,
-            'dateFrom' => $date_from,
-            'dateTo' => $date_to,
+            'search_name' => $name, 
+            'search_email'=> $email, 
+            'search_date_from' => $date_from, 
+            'search_date_to'   => $date_to
         ]);
         $users = $this->userService->searchUser($name, $email, $date_from, $date_to);
         return view('User.userlist', compact('users'));
@@ -205,9 +218,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function showProfile($userId)
+    public function showProfile($user_id)
     {
-        $user_profile = $this->userService->userDetail($userId);
+        $user_profile = $this->userService->userDetail($user_id);
         return view('User.userProfile', compact('user_profile'));
     }
 
@@ -217,9 +230,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($userId)
+    public function edit($user_id)
     {
-        $user_detail = $this->userService->userDetail($userId);
+        $user_detail = $this->userService->userDetail($user_id);
         return view('User.edit', compact('user_detail'));
     }
 
@@ -230,14 +243,15 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function editConfirm(Request $request, $userId)
+    public function editConfirm(Request $request, $user_id)
     {
-        $user = User::find($userId);
+        $user = User::find($user_id);
+        $email = $request->email;
         $validator = Validator::make($request->all(), [
-            'user_name'  =>  'required',
-            'email'     =>  'required|email|unique:users,email,'.$user->id,
-            'phone'     =>  'required|numeric|regex:/(09)[0-9]{7}/',
-            'profile_photo'   =>  'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'user_name' =>  'required', 
+            'email'     =>  'required|email|unique:users,email,'. $user->id,  
+            'phone'     =>  'required|numeric|regex:/(09)[0-9]{7}/', 
+            'profile_photo' => 'image|mimes:jpeg, png, jpg, gif, svg|max:2048'
         ]);
         if ($validator->fails()) {
             return redirect()->back()
@@ -251,8 +265,8 @@ class UserController extends Controller
         $user->phone   =  $request->phone;
         $user->dob     =  $request->dob;
         $user->address =  $request->address;
-        $new_profile =  $request->file('profile_photo');
-        $old_profile = $request->oldProfile;
+        $new_profile   =  $request->file('profile_photo');
+        $old_profile   =  $request->oldProfile;
 
         //tempory save new profile photo
         if ($new_profile) {
@@ -260,7 +274,7 @@ class UserController extends Controller
             $new_profile->move('img/tempProfile', $file_name);
             $user->profile = $file_name;
         }
-        return view('User.Update', compact('user', 'old_profile', 'userId'));
+        return view('User.Update', compact('user', 'old_profile', 'user_id'));
     }
 
     /**
@@ -270,24 +284,24 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $userId)
+    public function update(Request $request, $user_id)
     {
         $auth_id = Auth::user()->id;
         $user   = new User;
-        $user->id      =  $userId;
+        $user->id      =  $user_id;
         $user->name    =  $request->name;
         $user->email   =  $request->email;
         $user->type    =  $request->type;
         $user->phone   =  $request->phone;
         $user->dob     =  $request->dob;
         $user->address =  $request->address;
-        $new_profile    =  $request->newProfile;
-        $old_profile    =  $request->oldProfile;
+        $new_profile   =  $request->newProfile;
+        $old_profile   =  $request->oldProfile;
         if ($new_profile) {
-            $oldpath = public_path().'/img/tempProfile/'.$new_profile;
-            $newpath = public_path().'/img/profile/'.$new_profile;
+            $oldpath = public_path() . '/img/tempProfile/' . $new_profile;
+            $newpath = public_path() . '/img/profile/' . $new_profile;
             File::move($oldpath, $newpath);
-            $user->profile = '/img/profile/'.$new_profile;
+            $user->profile = '/img/profile/' . $new_profile;
         } else {
             $user->profile = $old_profile;
         }
@@ -301,9 +315,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function showPwdForm($userId)
+    public function showPwdForm($user_id)
     {
-        return view('User.changePassword', compact('userId'));
+        return view('User.changePassword', compact('user_id'));
     }
 
     /**
@@ -313,11 +327,11 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function changePassword(Request $request, $userId)
+    public function changePassword(Request $request, $user_id)
     {
         $validator = Validator::make($request->all(), [
-            'old_password'  =>  'required|min:8|regex:/^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/',
-            'password'  =>  'required|min:8|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/',
+            'old_password' => 'required|min:8|regex:/^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/',
+            'password'     => 'required|min:8|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/',
             'password_confirmation' => 'required|min:8|regex:/^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/',
         ]);
         if ($validator->fails()) {
@@ -325,11 +339,11 @@ class UserController extends Controller
                         ->withErrors($validator)
                         ->withInput();
         }
-        $old_pwd   =   $request->old_password;
-        $new_pwd   =   $request->password;
-        $auth_id = Auth::user()->id;
-        $auth_type = Auth::user()->type;
-        $status = $this->userService->changePassword($auth_id, $userId, $old_pwd, $new_pwd);
+        $old_pwd    =  $request->old_password;
+        $new_pwd    =  $request->password;
+        $auth_id    =  Auth::user()->id;
+        $auth_type  =  Auth::user()->type;
+        $status = $this->userService->changePassword($auth_id, $user_id, $old_pwd, $new_pwd);
         if ($status) {
             if ($auth_type == '0') {
                 return redirect()->intended('posts')->with('success-changPwd', 'Password change successfully.');
@@ -347,9 +361,9 @@ class UserController extends Controller
      */
     public function destroy(Request $request)
     {
-        $user_id = $request->userId;
+        $user_id = $request->user_id;
         $auth_id = Auth::user()->id;
         $delete_user = $this->userService->softDelete($auth_id, $user_id);
-        return redirect()->intended('users');
+        return redirect()->intended('users')->with('success', 'User delete successfully.');
     }
 }

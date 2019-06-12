@@ -44,9 +44,9 @@ class PostService implements PostServiceInterface
    * @param Object
    * @return $postDetail
    */
-  public function postDetail($postId)
+  public function postDetail($post_id)
   {
-    return $this->postDao->postDetail($postId);
+    return $this->postDao->postDetail($post_id);
   }
 
   /**
@@ -64,9 +64,9 @@ class PostService implements PostServiceInterface
    * @param Object
    * @return $posts
    */
-  public function searchPost($search_keyword)
+  public function searchPost($search_keyword, $auth_id, $auth_type)
   {
-    return $this->postDao->searchPost($search_keyword);
+    return $this->postDao->searchPost($search_keyword, $auth_id, $auth_type);
   }
 
   /**
