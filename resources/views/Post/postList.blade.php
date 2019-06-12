@@ -62,17 +62,13 @@
                 @foreach($posts as $key => $post)
                 <tr>
                     <td>{{ $posts->firstItem() + $key }}</td>
-                    <td><a href="">{{$post->title}}</a></td>
+                    <td><button class="btn btn-link postDetail" data-id="{{$post->id}}">{{$post->title}}</button></td>
                     <td>{{$post->description}}</td>
                     <td>{{$post->user->name}}</td>
                     <td>{{$post->created_at}}</td>
                     <td><a href="/post/{{$post->id}}" class="btn btn-primary">Edit</a></td>
-                    <td>
-                        <form action="/post/{{$post->id}}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-danger" type="submit">Delete</button>
-                        </form>
+                    <td><a href="#deleteConfirmModal" class="btn btn-danger postDelete"
+                           data-toggle="modal" data-id="{{$post->id}}">Delete</a>
                     </td>
                 </tr>
                 @endforeach
@@ -81,6 +77,52 @@
         <ul class="pagination col-md-12 justify-content-center">
             {{$posts->links()}}
         </ul>
+    </div>
+    <!-- Post Detail Modal -->
+    <div class="modal fade" id="postDetailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="post-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="font-italic text-sm" id="posted-date"></p>
+                    <div id="post-desc"></div>
+                    <p class="font-italic text-sm-right" id="posted-user"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Post delete confirm Modal -->
+    <div class="modal fade" id="deleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure want to delete this post?</p>
+                </div>
+                <div class="modal-footer">
+                    <form action="/post" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <input type="hidden" id="post_id" name="postId">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-danger" type="submit">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div><!-- /#postList -->
 @endsection

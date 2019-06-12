@@ -11,13 +11,13 @@
     <div class="row">
         <div class="col-md-8  mx-auto">
             <div class="text-center mb-4">
-                <img width="100px" height="80px" src="/img/tempProfile/{{$fileName}}" alt="User-profile" class="img-thumbnail">
+                <img width="100px" height="80px" src="/img/tempProfile/{{$filename}}" alt="User-profile" class="img-thumbnail">
             </div>
         </div>
         <div class="col-md-8 mx-auto">
             <form action="/user/create" method="POST" enctype="multipart/form-data">
                 @csrf
-                <input type="hidden" name="fileName" value="{{$fileName}}">
+                <input type="hidden" name="filename" value="{{$filename}}">
                 <div class="form-group row">
                     <label class="col-md-4">Name</label>
                     <label class="border border-dark p-2 col-md-6">{{$name}}</label>
@@ -30,7 +30,7 @@
                 </div>
                 <div class="form-group row">
                     <label class="col-md-4">Password</label>
-                    <label class="border border-dark p-2 col-md-6">{{$pwdHide}}</label>
+                    <label class="border border-dark p-2 col-md-6">{{$pwd_hide}}</label>
                     <input type="hidden" name="password" value="{{$pwd}}">
                 </div>
                 <div class="form-group row">

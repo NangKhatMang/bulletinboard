@@ -8,7 +8,6 @@ use App\Contracts\Services\User\UserServiceInterface;
 use App\Services\User\UserService;
 use App\Http\Controllers\Redirect;
 use App\Models\User;
-use Log;
 use Validator;
 use Auth;
 use Hash;
@@ -23,6 +22,9 @@ class UserController extends Controller
         $this->userService = $user;
     }
 
+    /**
+     * Show user registrarrion form.
+     */
     public function showRegisterForm()
     {
         return view('User.create');
@@ -75,7 +77,16 @@ class UserController extends Controller
      */
     public function index()
     {
-        session()->forget(['name','email','dateFrom','dateTo']);
+        session()->forget([
+            'name',
+            'email',
+            'type',
+            'phone',
+            'dob',
+            'address',
+            'date_from',
+            'date_to'
+        ]);
         $users = $this->userService->getUser();
         return view('User.userList', compact('users'));
     }
@@ -107,19 +118,27 @@ class UserController extends Controller
         $phone   =  $request->phone;
         $dob     =  $request->dob;
         $address =  $request->address;
-        $profileImg   =  $request->file('profileImg');
+        $profile_img   =  $request->file('profileImg');
 
         //password show as ***
         $hide = "*";
-        $pwdHide = str_pad($hide, strlen($pwd), "*");
+        $pwd_hide = str_pad($hide, strlen($pwd), "*");
         //tempory save profile photo
-        $fileName = "";
-        if ($profileImg) {
-            $fileName = $profileImg->getClientOriginalName();
-            $profileImg->move('img/tempProfile', $fileName);
+        $filename = "";
+        if ($profile_img) {
+            $filename = $profile_img->getClientOriginalName();
+            $profile_img->move('img/tempProfile', $filename);
         }
+        session ([
+            'name' => $name,
+            'email'=> $email,
+            'type' => $type,
+            'phone' => $phone,
+            'dob' => $dob,
+            'address' => $address
+        ]);
         return view('User.createConfirm', compact(
-            'name', 'email','pwd', 'type', 'phone', 'dob', 'address', 'pwdHide', 'fileName'
+            'name', 'email','pwd', 'type', 'phone', 'dob', 'address', 'pwd_hide', 'filename'
         ));
     }
 
@@ -131,14 +150,14 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $authId    =  Auth::user()->id;
+        $auth_id    =  Auth::user()->id;
         //save profile image
-        $fileName  =  $request->fileName;
-        if ($fileName) {
-            $oldpath    =  public_path().'/img/tempProfile/'.$fileName;
-            $newpath    =  public_path().'/img/profile/'.$fileName;
+        $filename  =  $request->filename;
+        if ($filename) {
+            $oldpath    =  public_path().'/img/tempProfile/'.$filename;
+            $newpath    =  public_path().'/img/profile/'.$filename;
             File::move($oldpath, $newpath);
-            $profile    =  '/img/profile/'.$fileName;
+            $profile    =  '/img/profile/'.$filename;
         } else {
             $profile    =  '';
         }
@@ -154,7 +173,7 @@ class UserController extends Controller
         $user->profile  =  $profile;
         
         
-        $insertCommand  =  $this->userService->store($authId, $user);
+        $insert_user  =  $this->userService->store($auth_id, $user);
         return redirect()->intended('users')->with('success', 'User create successfully.');
     }
 
@@ -168,15 +187,15 @@ class UserController extends Controller
     {
         $name = $request->name;
         $email = $request->email;
-        $dateFrom = $request->dateFrom;
-        $dateTo = $request->dateTo;
+        $date_from = $request->dateFrom;
+        $date_to = $request->dateTo;
         session ([
             'name' => $name,
             'email'=> $email,
-            'dateFrom' => $dateFrom,
-            'dateTo' => $dateTo,
+            'dateFrom' => $date_from,
+            'dateTo' => $date_to,
         ]);
-        $users = $this->userService->searchUser($name, $email, $dateFrom, $dateTo);
+        $users = $this->userService->searchUser($name, $email, $date_from, $date_to);
         return view('User.userlist', compact('users'));
     }
 
@@ -188,8 +207,8 @@ class UserController extends Controller
      */
     public function showProfile($userId)
     {
-        $userProfile = $this->userService->userDetail($userId);
-        return view('User.userProfile', compact('userProfile'));
+        $user_profile = $this->userService->userDetail($userId);
+        return view('User.userProfile', compact('user_profile'));
     }
 
     /**
@@ -200,8 +219,8 @@ class UserController extends Controller
      */
     public function edit($userId)
     {
-        $userDetail = $this->userService->userDetail($userId);
-        return view('User.edit', compact('userDetail'));
+        $user_detail = $this->userService->userDetail($userId);
+        return view('User.edit', compact('user_detail'));
     }
 
     /**
@@ -232,16 +251,16 @@ class UserController extends Controller
         $user->phone   =  $request->phone;
         $user->dob     =  $request->dob;
         $user->address =  $request->address;
-        $newProfile =  $request->file('profile_photo');
-        $oldProfile = $request->oldProfile;
+        $new_profile =  $request->file('profile_photo');
+        $old_profile = $request->oldProfile;
 
         //tempory save new profile photo
-        if ($newProfile) {
-            $fileName = $newProfile->getClientOriginalName();
-            $newProfile->move('img/tempProfile', $fileName);
-            $user->profile = $fileName;
+        if ($new_profile) {
+            $file_name = $new_profile->getClientOriginalName();
+            $new_profile->move('img/tempProfile', $file_name);
+            $user->profile = $file_name;
         }
-        return view('User.Update', compact('user', 'oldProfile', 'userId'));
+        return view('User.Update', compact('user', 'old_profile', 'userId'));
     }
 
     /**
@@ -253,7 +272,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $userId)
     {
-        $authId = Auth::user()->id;
+        $auth_id = Auth::user()->id;
         $user   = new User;
         $user->id      =  $userId;
         $user->name    =  $request->name;
@@ -262,17 +281,17 @@ class UserController extends Controller
         $user->phone   =  $request->phone;
         $user->dob     =  $request->dob;
         $user->address =  $request->address;
-        $newProfile    =  $request->newProfile;
-        $oldProfile    =  $request->oldProfile;
-        if ($newProfile) {
-            $oldpath = public_path().'/img/tempProfile/'.$newProfile;
-            $newpath = public_path().'/img/profile/'.$newProfile;
+        $new_profile    =  $request->newProfile;
+        $old_profile    =  $request->oldProfile;
+        if ($new_profile) {
+            $oldpath = public_path().'/img/tempProfile/'.$new_profile;
+            $newpath = public_path().'/img/profile/'.$new_profile;
             File::move($oldpath, $newpath);
-            $user->profile = '/img/profile/'.$newProfile;
+            $user->profile = '/img/profile/'.$new_profile;
         } else {
-            $user->profile = $oldProfile;
+            $user->profile = $old_profile;
         }
-        $updateCommand  =  $this->userService->update($authId, $user);
+        $update_user  =  $this->userService->update($auth_id, $user);
         return redirect()->intended('posts')->with('success', 'User update successfully.');
     }
 
@@ -306,13 +325,13 @@ class UserController extends Controller
                         ->withErrors($validator)
                         ->withInput();
         }
-        $oldPwd   =   $request->old_password;
-        $newPwd   =   $request->password;
-        $authId = Auth::user()->id;
-        $authType = Auth::user()->type;
-        $status = $this->userService->changePassword($authId, $userId, $oldPwd, $newPwd);
+        $old_pwd   =   $request->old_password;
+        $new_pwd   =   $request->password;
+        $auth_id = Auth::user()->id;
+        $auth_type = Auth::user()->type;
+        $status = $this->userService->changePassword($auth_id, $userId, $old_pwd, $new_pwd);
         if ($status) {
-            if ($authType == '0') {
+            if ($auth_type == '0') {
                 return redirect()->intended('posts')->with('success-changPwd', 'Password change successfully.');
             }
         } else {
@@ -326,8 +345,11 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $user_id = $request->userId;
+        $auth_id = Auth::user()->id;
+        $delete_user = $this->userService->softDelete($auth_id, $user_id);
+        return redirect()->intended('users');
     }
 }

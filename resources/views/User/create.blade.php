@@ -15,7 +15,7 @@
             @method('PUT')
                 <div class="form-group row">
                     <label for="name" class="col-md-4">Name</label>
-                    <input type="text" id="name" name="user_name" value="{{old('user_name')}}" class="form-control col-md-6">
+                    <input type="text" id="name" name="user_name" value="{{old('user_name',session('name'))}}" class="form-control col-md-6">
                     @if ($errors->has('user_name'))    
                         <div class="col-md-4"></div>
                         <div class="col-md-6 mt-1 text-danger">{{ $errors->first('user_name') }}</div>
@@ -23,7 +23,7 @@
                 </div>
                 <div class="form-group row">
                     <label for="email" class="col-md-4">Email Address</label>
-                    <input type="text" id="email" name="email" value="{{old('email')}}" class="form-control col-md-6">
+                    <input type="text" id="email" name="email" value="{{old('email',session('email'))}}" class="form-control col-md-6">
                     @if ($errors->has('email'))    
                         <div class="col-md-4"></div>
                         <div class="col-md-6 mt-1 text-danger">{{ $errors->first('email') }}</div>
@@ -50,14 +50,14 @@
                     <select name="type" id="type" class="col-md-6">
                         <option value="" disabled selected>-- Choose Authority --</option>
                         <option value="0"
-                            @if (old('type') == '0' ) {{"selected"}} @endif>Admin</option>
+                            @if (old('type',session('type')) == '0' ) {{"selected"}} @endif>Admin</option>
                         <option value="1"
-                            @if (old('type') == '1' ) {{"selected"}} @endif>User</option>
+                            @if (old('type',session('type')) == '1' ) {{"selected"}} @endif>User</option>
                     </select>
                 </div>
                 <div class="form-group row">
                     <label for="phone" class="col-md-4">Phone</label>
-                    <input type="text" id="phone" name="phone" value="{{old('phone')}}" class="form-control col-md-6">
+                    <input type="text" id="phone" name="phone" value="{{old('phone',session('phone'))}}" class="form-control col-md-6">
                     @if ($errors->has('phone'))    
                         <div class="col-md-4"></div>
                         <div class="col-md-6 mt-1 text-danger">{{ $errors->first('phone') }}</div>
@@ -65,11 +65,11 @@
                 </div>
                 <div class="form-group row">
                     <label for="dob" class="col-md-4">Date of Birth</label>
-                    <input type="date" id="dob" name="dob" value="{{old('dob')}}" class="form-control col-md-6">
+                    <input type="date" id="dob" name="dob" value="{{old('dob',session('dob'))}}" class="form-control col-md-6">
                 </div>
                 <div class="form-group row">
                     <label for="address" class="col-md-4">Address</label>
-                    <textarea name="address" id="address" class="form-control col-md-6">{{old('address')}}</textarea>
+                    <textarea name="address" id="address" class="form-control col-md-6">{{old('address',session('address'))}}</textarea>
                 </div>
                 <div class="form-group row">
                     <label for="profile" class="col-md-4">Profile</label>

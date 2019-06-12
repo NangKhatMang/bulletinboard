@@ -18,6 +18,9 @@
                     @if($errors->has('file'))
                         <label class="text-danger mt-2 mb-0">{{ $errors->first('file') }}</label>
                     @endif
+                    @if(Session::has('invalid'))
+                        <label class="text-danger mt-2 mb-0">{{ Session::get('invalid') }}</label>
+                    @endif
                 </div>
                 <div class="form-group">
                     <div class="text-center">

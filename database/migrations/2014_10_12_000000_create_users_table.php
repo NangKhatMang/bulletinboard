@@ -31,7 +31,6 @@ class CreateUsersTable extends Migration
             $table->datetime('updated_at')->useCurrent();
             $table->datetime('deleted_at')->nullable();
             $table->rememberToken();
-            $table->softDeletes();
         });
     }
 

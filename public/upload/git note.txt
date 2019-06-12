@@ -1,0 +1,57 @@
+Clone repository
+git clone xxxxxxxxxxx
+
+Pull data from origin to local
+git pull origin xxxxx
+
+Add modified file to local
+git add .
+or
+git add *
+or 
+git add xxxx xxxxx xxxxx
+
+Commit modified file to local
+git commit -m "comment"
+
+Push commited data to origin
+git push origin xxxx
+
+Create new branch in local
+git checkout -b branch_name
+
+Checkout origin branch by new branch
+git checkout -b branch_name origin/xxxx
+
+Checkout existed branch
+git checkout branch_name
+
+Check local branch list
+git branch
+
+Check all branches of local and origin
+git branch -a
+
+Revert modified file
+git checkout  file_name
+
+Check diff of modified file
+git diff file_name
+
+Check git status
+git status
+
+Set Configuration
+git config
+
+Import new project
+git init
+
+Confirm git log
+git log
+
+Confirm git log completely diffs at each step
+git log -p
+
+Merge branch
+git merge branch_name

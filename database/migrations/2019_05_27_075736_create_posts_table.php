@@ -28,7 +28,6 @@ class CreatePostsTable extends Migration
             $table->datetime('created_at')->useCurrent();
             $table->datetime('updated_at')->useCurrent();
             $table->datetime('deleted_at')->nullable();
-            $table->softDeletes();
             // $table->foreign('create_user_id')->references('id')->on('users');
             // $table->foreign('updated_user_id')->references('id')->on('users');
         });

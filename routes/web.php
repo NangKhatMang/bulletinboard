@@ -29,8 +29,10 @@ Route::put('/post/{postId}', 'Post\PostController@editConfirm');
 Route::post('/post/{postId}', 'Post\PostController@update');
 //posts search
 Route::get('/posts/search', 'Post\PostController@search');
+//post detail show
+Route::get('/post/show/{postId}', 'Post\PostController@show');
 //post delete
-Route::delete('/post/{postId}', 'Post\PostController@softDelete');
+Route::delete('/post', 'Post\PostController@destroy');
 //export excel
 Route::get('/download', 'Post\PostController@export');
 //import csv file
@@ -54,3 +56,5 @@ Route::get('/changePwd/{userId}', 'User\UserController@showPwdForm');
 Route::Post('/changePwd/{userId}', 'User\UserController@changePassword');
 //user profile
 Route::get('/user/profile/{userId}', 'User\UserController@showProfile');
+//user delete
+Route::delete('/user', 'User\UserController@destroy');

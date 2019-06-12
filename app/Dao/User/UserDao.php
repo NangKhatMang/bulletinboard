@@ -4,9 +4,8 @@ namespace App\Dao\User;
 
 use App\Contracts\Dao\User\UserDaoInterface;
 use App\Models\User;
+use App\Models\Post;
 use Hash;
-use Log;
-use DB;
 
 class UserDao implements UserDaoInterface
 {
@@ -17,18 +16,19 @@ class UserDao implements UserDaoInterface
    */
   public function getUser()
   {
-    $users = User::select('users.name',
-                           'users.email',
-                           'users.phone',
-                           'users.dob',
-                           'users.address',
-                           'users.created_at',
-                           'users.updated_at',
-                           'users.id',
-                           'u1.name as created_user_name')
-                  ->join('users as u1', 'u1.id', 'users.create_user_id')
-                  ->orderBy('users.updated_at', 'DESC')
-                  ->paginate(50);
+    $users = User::select(
+      'users.name',
+      'users.email',
+      'users.phone',
+      'users.dob',
+      'users.address',
+      'users.created_at',
+      'users.updated_at',
+      'users.id',
+      'u1.name as created_user_name')
+      ->join('users as u1', 'u1.id', 'users.create_user_id')
+      ->orderBy('users.updated_at', 'DESC')
+      ->paginate(50);
     return $users;
   }
 
@@ -37,9 +37,9 @@ class UserDao implements UserDaoInterface
    * @param Object
    * @return $posts
    */
-  public function store($authId, $user)
+  public function store($auth_id, $user)
   {
-    $insertUser = new User([
+    $insert_user = new User([
       'name'            =>  $user->name,
       'email'           =>  $user->email,
       'password'        =>  $user->password,
@@ -48,10 +48,10 @@ class UserDao implements UserDaoInterface
       'phone'           =>  $user->phone,
       'address'         =>  $user->address,
       'dob'             =>  $user->dob,
-      'create_user_id'  =>  $authId,
-      'updated_user_id' =>  $authId
+      'create_user_id'  =>  $auth_id,
+      'updated_user_id' =>  $auth_id
     ]);
-    $insertUser->save();
+    $insert_user->save();
     return redirect()->back();
   }
 
@@ -60,23 +60,23 @@ class UserDao implements UserDaoInterface
    * @param Object
    * @return $users
    */
-  public function searchUser($name, $email, $dateFrom, $dateTo)
+  public function searchUser($name, $email, $date_from, $date_to)
   {
-    if ($name == null && $email == null && $dateFrom == null & $dateTo == null) {
+    if ($name == null && $email == null && $date_from == null & $date_to == null) {
       $users = User::orderBy('updated_at', 'DESC')->paginate(50);
     } else {
         if ((isset($name) || isset($email)) &&
-            (is_null($dateFrom) && is_null($dateTo))) {
+            (is_null($date_from) && is_null($date_to))) {
                 $users = User::where([
                     ['name', 'LIKE', '%' . $name . '%'],
                     ['email', 'LIKE', '%' . $email . '%']
                 ])->orderBy('updated_at', 'DESC')->paginate(50);
         } elseif ((isset($name) || isset($email)) ||
-            (isset($dateFrom) && isset($dateTo))) {
+            (isset($date_from) && isset($date_to))) {
                 $users = User::where([
                     ['name', 'LIKE', '%' . $name . '%'],
                     ['email', 'LIKE', '%' . $email . '%']
-                ])->whereBetween('created_at', array($dateFrom,$dateTo))
+                ])->whereBetween('created_at', array($date_from,$date_to))
                   ->orderBy('updated_at', 'DESC')
                   ->paginate(50);
         }
@@ -91,8 +91,8 @@ class UserDao implements UserDaoInterface
    */
   public function userDetail($userId)
   {
-    $userDetail = User::find($userId);
-    return $userDetail;
+    $user_detail = User::find($userId);
+    return $user_detail;
   }
 
   /**
@@ -100,22 +100,22 @@ class UserDao implements UserDaoInterface
    * @param Object
    * @return $users
    */
-  public function update($authId, $user)
+  public function update($auth_id, $user)
   {
     if ($user->profile == null) {
       $user->profile = "";
     }
-    $updateUser = User::find($user->id);
-    $updateUser->name = $user->name;
-    $updateUser->email = $user->email;
-    $updateUser->profile = $user->profile;
-    $updateUser->type = $user->type;
-    $updateUser->phone = $user->phone;
-    $updateUser->address = $user->address;
-    $updateUser->dob = $user->dob;
-    $updateUser->updated_user_id = $authId;
-    $updateUser->updated_at = now();
-    $updateUser->save();
+    $update_user = User::find($user->id);
+    $update_user->name = $user->name;
+    $update_user->email = $user->email;
+    $update_user->profile = $user->profile;
+    $update_user->type = $user->type;
+    $update_user->phone = $user->phone;
+    $update_user->address = $user->address;
+    $update_user->dob = $user->dob;
+    $update_user->updated_user_id = $auth_id;
+    $update_user->updated_at = now();
+    $update_user->save();
     return redirect()->back();
   }
 
@@ -124,16 +124,36 @@ class UserDao implements UserDaoInterface
    * @param Object
    * @return $users
    */
-  public function changePassword($authId, $userId, $oldPwd, $newPwd)
+  public function changePassword($auth_id, $userId, $old_pwd, $new_pwd)
   {
-    $updateUser = User::find($userId);
-    $status = Hash::check($oldPwd, $updateUser->password);
+    $update_user = User::find($userId);
+    $status = Hash::check($old_pwd, $update_user->password);
     if ($status) {
-        $updateUser->password = Hash::make($newPwd);
-        $updateUser->updated_user_id = $authId;
-        $updateUser->updated_at = now();
-        $updateUser->save();
+        $update_user->password = Hash::make($new_pwd);
+        $update_user->updated_user_id = $auth_id;
+        $update_user->updated_at = now();
+        $update_user->save();
     }
     return $status;
+  }
+
+  /**
+   * Soft Delete User
+   * @param Object
+   * @return $users
+   */
+  public function softDelete($auth_id, $user_id)
+  {
+    $user_delete = User::find($user_id);
+    $user_delete->deleted_user_id = $auth_id;
+    $user_delete->deleted_at = now();
+    $user_delete->save();
+
+    $postDelete = Post::where('create_user_id','=',$user_id)
+      ->update([
+        'deleted_user_id' => $auth_id,
+        'deleted_at'      => now(),
+      ]);
+    return back();
   }
 }

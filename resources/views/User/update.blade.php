@@ -13,12 +13,12 @@
             <div class="col-md-8  mx-auto">
                 <div class="text-center mb-4">
                     <img width="100px" height="80px" alt="User-profile" class="img-thumbnail"
-                        src="@if($user->profile)/img/tempProfile/{{$user->profile}} @else {{$oldProfile}} @endif">
+                        src="@if($user->profile)/img/tempProfile/{{$user->profile}} @else {{$old_profile}} @endif">
                 </div>
             </div>
             <form action="/user/{{$userId}}" method="POST">
                 @csrf
-                <input type="hidden" name="oldProfile" value="{{$oldProfile}}">
+                <input type="hidden" name="oldProfile" value="{{$old_profile}}">
                 <input type="hidden" name="newProfile" value="{{$user->profile}}">
                 <div class="form-group row">
                     <label class="col-md-4">Name</label>

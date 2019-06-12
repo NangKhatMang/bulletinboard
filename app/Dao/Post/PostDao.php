@@ -4,8 +4,6 @@ namespace App\Dao\Post;
 
 use App\Contracts\Dao\Post\PostDaoInterface;
 use App\Models\Post;
-use Hash;
-use Log;
 
 class PostDao implements PostDaoInterface
 {
@@ -14,12 +12,12 @@ class PostDao implements PostDaoInterface
    * @param Object
    * @return $posts
    */
-  public function getPost($authId, $type)
+  public function getPost($auth_id, $type)
   {
     if ($type == '0') {
       $posts = Post::orderBy('updated_at','DESC')->paginate(50);
     } else {
-      $posts = Post::where('create_user_id', $authId)
+      $posts = Post::where('create_user_id', $auth_id)
         ->orderBy('updated_at','DESC')
         ->paginate(50);
     }
@@ -33,8 +31,8 @@ class PostDao implements PostDaoInterface
    */
   public function postDetail($postId)
   {
-    $postDetail = Post::find($postId);
-    return $postDetail;
+    $post_detail = Post::find($postId);
+    return $post_detail;
   }
 
   /**
@@ -42,16 +40,16 @@ class PostDao implements PostDaoInterface
    * @param Object
    * @return $posts
    */
-  public function store($authId, $post)
+  public function store($auth_id, $post)
   {
-    $insertPost = new Post([
+    $insert_post = new Post([
       'title'           =>  $post->title,
       'description'     =>  $post->desc,
-      'create_user_id'  =>  $authId,
-      'updated_user_id' =>  $authId
+      'create_user_id'  =>  $auth_id,
+      'updated_user_id' =>  $auth_id
     ]);
-    $insertPost->save();
-    $posts = Post::where('create_user_id', $authId)
+    $insert_post->save();
+    $posts = Post::where('create_user_id', $auth_id)
         ->orderBy('updated_at','DESC')
         ->paginate(50);
     return $posts;
@@ -62,17 +60,17 @@ class PostDao implements PostDaoInterface
    * @param Object
    * @return $posts
    */
-  public function update($userId, $post)
+  public function update($user_id, $post)
   {
-    $updatePost = Post::find($post->id);
-    $updatePost->title            =  $post->title;
-    $updatePost->description      =  $post->desc;
-    $updatePost->updated_user_id  =  $userId;
-    $updatePost->updated_at       =  now();
-    $updatePost->save();
-    $posts = Post::where('create_user_id', $userId)
-        ->orderBy('updated_at','DESC')
-        ->paginate(50);
+    $update_post = Post::find($post->id);
+    $update_post->title            =  $post->title;
+    $update_post->description      =  $post->desc;
+    $update_post->updated_user_id  =  $user_id;
+    $update_post->updated_at       =  now();
+    $update_post->save();
+    $posts = Post::where('create_user_id', $user_id)
+                  ->orderBy('updated_at','DESC')
+                  ->paginate(50);
     return $posts;
   }
 
@@ -81,13 +79,13 @@ class PostDao implements PostDaoInterface
    * @param Object
    * @return $posts
    */
-  public function searchPost($searchKeyword)
+  public function searchPost($search_keyword)
   {
-    if ($searchKeyword == null) {
+    if ($search_keyword == null) {
       $posts = Post::orderBy('updated_at','DESC')->paginate(50);
     } else {
-        $posts = Post::where('title', 'LIKE', '%' . $searchKeyword . '%')
-                      ->orwhere('description', 'LIKE', '%' . $searchKeyword . '%')
+        $posts = Post::where('title', 'LIKE', '%' . $search_keyword . '%')
+                      ->orwhere('description', 'LIKE', '%' . $search_keyword . '%')
                       ->orderBy('updated_at','DESC')
                       ->paginate(50);
     }
@@ -99,15 +97,15 @@ class PostDao implements PostDaoInterface
    * @param Object
    * @return $posts
    */
-  public function import($authId, $filepath)
+  public function import($auth_id, $filepath)
   {
     if (($handle = fopen($filepath, 'r')) !== FALSE) {
       while (($data = fgetcsv($handle, 1000, ',' )) !== FALSE ) {
           $post = new Post;
           $post->title = $data [0];
           $post->description = $data [1];
-          $post->create_user_id = $authId;
-          $post->updated_user_id = $authId;
+          $post->create_user_id = $auth_id;
+          $post->updated_user_id = $auth_id;
           $post->save ();
           }
       fclose($handle);
@@ -120,12 +118,12 @@ class PostDao implements PostDaoInterface
    * @param Object
    * @return $posts
    */
-  public function softDelete($authId, $postId)
+  public function softDelete($auth_id, $post_id)
   {
-    $deletePost = Post::withTrashed()
-                      ->where('id', $postId)
-                      ->get();
-    // var_dump($deletePost);die();    
+    $delete_post = Post::find($post_id);
+    $delete_post->deleted_user_id = $auth_id;
+    $delete_post->deleted_at = now();
+    $delete_post->save();
     return back();
   }
 }

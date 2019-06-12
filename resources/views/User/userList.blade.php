@@ -37,8 +37,8 @@
         <form action="/user/search" method="GET" class="form-inline">
             <input type="text" name="name" value="{{session('name')}}" class="form-control mb-4 mr-3" placeholder="Name">
             <input type="text" name="email" value="{{session('email')}}" class="form-control mb-4 mr-3" placeholder="Email">
-            <input type="text" name="dateFrom" value="{{session('dateFrom')}}" onfocus="(this.type='date')" onblur="if(this.value==''){this.type='text'}" class="form-control mb-4 mr-3" placeholder="Created From">
-            <input type="text" name="dateTo" value="{{session('dateTo')}}" onfocus="(this.type='date')" onblur="if(this.value==''){this.type='text'}" class="form-control mb-4 mr-3" placeholder="Created To">
+            <input type="text" name="dateFrom" value="{{session('date_from')}}" onfocus="(this.type='date')" onblur="if(this.value==''){this.type='text'}" class="form-control mb-4 mr-3" placeholder="Created From">
+            <input type="text" name="dateTo" value="{{session('date_to')}}" onfocus="(this.type='date')" onblur="if(this.value==''){this.type='text'}" class="form-control mb-4 mr-3" placeholder="Created To">
             <button type="submit" class="btn btn-primary mb-4 mr-3">Search</button>
             <a href="/user/create" class="btn btn-primary mb-4 mr-3">Add</a>
         </form>
@@ -70,12 +70,8 @@
                     <td>{{$user->created_at}}</td>
                     <td>{{$user->updated_at}}</td>
                     <td><a href="/user/{{$user->id}}" class="btn btn-primary">Edit</a></td>
-                    <td>
-                        <form action="/user/{{$user->id}}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-danger" type="submit">Delete</button>
-                        </form>
+                    <td><a href="#deleteConfirmModal" class="btn btn-danger userDelete"
+                            data-toggle="modal" data-id="{{$user->id}}">Delete</a>
                     </td>
                 </tr>
                 @endforeach
@@ -84,6 +80,31 @@
         <ul class="pagination col-md-12 justify-content-center">
             {{$users->links()}}
         </ul><!-- pagination -->
+    </div>
+    <!-- User delete confirm Modal -->
+    <div class="modal fade" id="deleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure want to delete this post?</p>
+                </div>
+                <div class="modal-footer">
+                    <form action="/user" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <input type="hidden" id="user_id" name="userId">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-danger" type="submit">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div><!-- /#userList -->
 @endsection

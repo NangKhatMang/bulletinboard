@@ -24,9 +24,9 @@ class PostService implements PostServiceInterface
    * @param Object
    * @return $posts
    */
-  public function getPost($authId, $type)
+  public function getPost($auth_id, $type)
   {
-    return $this->postDao->getPost($authId, $type);
+    return $this->postDao->getPost($auth_id, $type);
   }
 
   /**
@@ -34,9 +34,9 @@ class PostService implements PostServiceInterface
    * @param Object
    * @return $posts
    */
-  public function store($authId, $post)
+  public function store($auth_id, $post)
   {
-    return $this->postDao->store($authId, $post);
+    return $this->postDao->store($auth_id, $post);
   }
 
   /**
@@ -54,9 +54,9 @@ class PostService implements PostServiceInterface
    * @param Object
    * @return $posts
    */
-  public function update($userId, $post)
+  public function update($user_id, $post)
   {
-    return $this->postDao->update($userId, $post);
+    return $this->postDao->update($user_id, $post);
   }
 
   /**
@@ -64,9 +64,9 @@ class PostService implements PostServiceInterface
    * @param Object
    * @return $posts
    */
-  public function searchPost($searchKeyword)
+  public function searchPost($search_keyword)
   {
-    return $this->postDao->searchPost($searchKeyword);
+    return $this->postDao->searchPost($search_keyword);
   }
 
   /**
@@ -74,9 +74,9 @@ class PostService implements PostServiceInterface
    * @param Object
    * @return $posts
    */
-  public function import($authId, $filepath)
+  public function import($auth_id, $filepath)
   {
-    return $this->postDao->import($authId, $filepath);
+    return $this->postDao->import($auth_id, $filepath);
   }
 
   /**
@@ -84,8 +84,8 @@ class PostService implements PostServiceInterface
    * @param Object
    * @return $posts
    */
-  public function softDelete($authId, $postId)
+  public function softDelete($auth_id, $post_id)
   {
-    return $this->postDao->softDelete($authId, $postId);
+    return $this->postDao->softDelete($auth_id, $post_id);
   }
 }

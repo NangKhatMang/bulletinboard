@@ -34,9 +34,9 @@ class UserService implements UserServiceInterface
    * @param Object
    * @return $users
    */
-  public function store($authId, $user)
+  public function store($auth_id, $user)
   {
-    return $this->userDao->store($authId, $user);
+    return $this->userDao->store($auth_id, $user);
   }
 
   /**
@@ -44,9 +44,9 @@ class UserService implements UserServiceInterface
    * @param Object
    * @return $users
    */
-  public function searchUser($name, $email, $dateFrom, $dateTo)
+  public function searchUser($name, $email, $date_from, $date_to)
   {
-    return $this->userDao->searchUser($name, $email, $dateFrom, $dateTo);
+    return $this->userDao->searchUser($name, $email, $date_from, $date_to);
   }
 
   /**
@@ -64,9 +64,9 @@ class UserService implements UserServiceInterface
    * @param Object
    * @return $users
    */
-  public function update($authId, $user)
+  public function update($auth_id, $user)
   {
-    return $this->userDao->update($authId, $user);
+    return $this->userDao->update($auth_id, $user);
   }
 
   /**
@@ -74,8 +74,18 @@ class UserService implements UserServiceInterface
    * @param Object
    * @return $users
    */
-  public function changePassword($authId, $userId, $oldPwd, $newPwd)
+  public function changePassword($auth_id, $userId, $old_pwd, $new_pwd)
   {
-    return $this->userDao->changePassword($authId, $userId, $oldPwd, $newPwd);
+    return $this->userDao->changePassword($auth_id, $userId, $old_pwd, $new_pwd);
+  }
+
+  /**
+   * Soft Delete User
+   * @param Object
+   * @return $users
+   */
+  public function softDelete($auth_id, $user_id)
+  {
+    return $this->userDao->softDelete($auth_id, $user_id);
   }
 }

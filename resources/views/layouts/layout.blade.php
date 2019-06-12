@@ -61,5 +61,45 @@
     </div><!-- /.wrapper -->
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+    <script>
+        $(document).ready(function(){
+            $('.postDetail').click(function(){
+                var postId = $(this).data('id');
+                // alert(postId);
+
+                $.ajax({
+                    url:'/post/show/'+postId,
+                    method:'GET',
+                    dataType:'json',
+                    success:function(data){
+                        console.log(data);
+                        $('#postDetailModal').modal('show');
+                        $('#post-title').html(data.post.title);
+                        $('#posted-date').html('posted at - '+data.post.created_at);
+                        $('#post-desc').html(data.post.description);
+                        $('#posted-user').html('- by '+data.user.name+' -');
+                    }
+                });
+            });
+        });
+        $('.postDelete').click(function(){
+            var postId = $(this).data('id');
+            $.ajax({
+                type:"GET",
+                success:function(){
+                $("#post_id").val(postId);
+                },
+            })
+        });
+        $('.userDelete').click(function(){
+            var usertId = $(this).data('id');
+            $.ajax({
+                type:"GET",
+                success:function(){
+                $("#user_id").val(usertId);
+                },
+            })
+        });
+    </script>
 </body>
 </html>
