@@ -52,7 +52,7 @@
                 <div class="form-group row">
                     <label for="phone" class="col-md-4">Phone</label>
                     <input type="text" id="phone" name="phone" class="form-control col-md-6"
-                        value="@if(old('phone')){{old('phone')}}@else{{$user_detail->phone}}@endif">
+                        value="{{old('phone',$user_detail->phone)}}">
                     @if ($errors->has('phone'))    
                         <div class="col-md-4"></div>
                         <div class="col-md-6 mt-1 text-danger">{{ $errors->first('phone') }}</div>
@@ -61,11 +61,15 @@
                 <div class="form-group row">
                     <label for="dob" class="col-md-4">Date of Birth</label>
                     <input type="date" id="dob" name="dob" class="form-control col-md-6"
-                        value="@if(old('dob')){{old('dob')}}@else{{$user_detail->dob}}@endif">
+                        value="{{old('dob',$user_detail->dob)}}">
                 </div>
                 <div class="form-group row">
                     <label for="address" class="col-md-4">Address</label>
-                    <textarea name="address" id="address" class="form-control col-md-6">@if(old('address')){{old('address')}}@else{{$user_detail->address}}@endif</textarea>
+                    <textarea name="address" id="address" class="form-control col-md-6">{{old('address',$user_detail->address)}}</textarea>
+                    @if ($errors->has('address'))    
+                        <div class="col-md-4"></div>
+                        <div class="col-md-6 mt-1 text-danger">{{ $errors->first('address') }}</div>
+                    @endif
                 </div>
                 <div class="form-group row">
                     <label for="profile_photo" class="col-md-4">Profile</label>

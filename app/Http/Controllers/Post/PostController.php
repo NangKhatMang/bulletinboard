@@ -66,7 +66,7 @@ class PostController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' =>  'required|max:255', 
-            'desc'  =>  'required'
+            'desc'  =>  'required|max:255'
         ]);
         if ($validator->fails()) {
             return redirect()->back()
@@ -156,7 +156,7 @@ class PostController extends Controller
         $desc   =   $request->desc;
         $validator  = Validator::make($request->all(), [
             'title' =>  'required|max:255', 
-            'desc'  =>  'required'
+            'desc'  =>  'required|max:255'
         ]);
         if ($validator->fails()) {
             return redirect()->back()
