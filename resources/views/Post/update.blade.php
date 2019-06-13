@@ -2,12 +2,14 @@
 
 @section('content')
 <div id="postEditConfirm">
+    <!-- page title -->
     <div class="row mb-3">
         <div class="col-md-1"></div>
         <div class="col">
             <h3>Post Confirm</h3>
         </div>
     </div>
+    <!-- post update confirmation -->
     <div class="row">
         <div class="col-md-8 mx-auto">
             <form action="/post/{{$post_id}}" method="POST">
@@ -37,5 +39,5 @@
             </form>
         </div>
     </div>
-</div><!-- /#postEditConfirm -->
+</div>
 @endsection

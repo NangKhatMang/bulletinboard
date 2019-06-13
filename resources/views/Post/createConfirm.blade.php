@@ -2,24 +2,26 @@
 
 @section('content')
 <div id="postConfirm">
+    <!-- page title -->
     <div class="row mb-3">
         <div class="col-md-1"></div>
         <div class="col">
             <h3>Post Confirm</h3>
         </div>
     </div>
+    <!-- post register confirmation -->
     <div class="row">
         <div class="col-md-8 mx-auto">
             <form action="/post/create" method="POST">
                 @csrf
                 <div class="form-group">
                     <label>Title</label>
-                    <label class="border border-dark col">{{$title}}</label>
+                    <label class="border border-dark col text-break">{{$title}}</label>
                     <input type="hidden" name="title" value="{{$title}}">
                 </div>
                 <div class="form-group">
                     <label class="">Description</label>
-                    <label class="border border-dark col">{{$desc}}</label>
+                    <label class="border border-dark col text-break">{{$desc}}</label>
                     <input type="hidden" name="desc" value="{{$desc}}">
                 </div>
                 <div class="form-group">
@@ -31,5 +33,5 @@
             </form>
         </div>
     </div>
-</div><!-- /#postConfirm -->
+</div>
 @endsection

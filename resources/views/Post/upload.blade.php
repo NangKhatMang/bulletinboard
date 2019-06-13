@@ -2,12 +2,14 @@
 
 @section('content')
 <div id="postAdd">
+    <!-- page title -->
     <div class="row mb-3">
         <div class="col-md-1"></div>
         <div class="col">
             <h3>Upload CSV File</h3>
         </div>
     </div>
+    <!-- upload form -->
     <div class="row">
         <div class="col-md-6 mx-auto">
             <form action="/csv/upload" method="POST" enctype="multipart/form-data" class="border border-dark p-5">
@@ -30,6 +32,5 @@
             </form>
         </div>
     </div>
-</div><!-- /#postAdd -->
-
+</div>
 @endsection

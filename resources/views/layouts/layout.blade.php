@@ -30,16 +30,14 @@
                                     <li class="nav-item">
                                         <a class="nav-link" href="/users">Users</a>
                                     </li>
-                                @endif
-                                @if(Auth::user()->type == '1')
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="/user/profile/{{Auth::user()->id}}">Profile</a>
-                                    </li>
-                                @endif
+                                @endif                                
                                 <li class="nav-item">
                                     <a class="nav-link" href="/posts">Posts</a>
                                 </li>
-                            </ul><!-- /.nav left -->
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/user/profile/{{Auth::user()->id}}">Profile</a>
+                                </li>
+                            </ul>
                             <!-- nav right -->
                             <ul class="navbar-nav ">
                                 <li class="nav-item">
@@ -48,18 +46,19 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="/user/logout">Logout</a>
                                 </li>
-                            </ul><!-- /.nav right -->
+                            </ul>
                         @endif
                     </div>
-                </div><!-- /.container -->
+                </div>
             </nav>
-        </header><!-- navigation -->
+        </header>
+        <!-- page content -->
         <section class="content">
             <div class="container">
                 @yield('content')
             </div>
-        </section><!-- /.content -->
-    </div><!-- /.wrapper -->
+        </section>
+    </div>
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>

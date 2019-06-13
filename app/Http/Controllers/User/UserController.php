@@ -42,8 +42,8 @@ class UserController extends Controller
         $email      =   $request->email;
         $pwd        =   $request->password;
         $validator  =   Validator::make($request->all(), [
-            'email'     =>  'required|email',
-            'password'  =>  'required|min:8|regex:/^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/',
+            'email'     =>  'required|email', 
+            'password'  =>  'required|min:8|regex:/^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/'
         ]);
         if ($validator->fails()) {
             return redirect()->back()
@@ -109,7 +109,7 @@ class UserController extends Controller
             'password_confirmation' => 'required|min:8|regex:/^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/', 
             'phone'     =>  'required|numeric|digits_between:6,20', 
             'address'   =>  'max:255', 
-            'profileImg'   =>  'image|mimes:jpeg,png,jpg,gif,svg|max:2048', 
+            'profileImg'   =>  'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
         if ($validator->fails()) {
             return redirect()->back()
@@ -251,7 +251,7 @@ class UserController extends Controller
         $email = $request->email;
         $validator = Validator::make($request->all(), [
             'user_name' =>  'required', 
-            'email'     =>  'required|email|unique:users,email,'. $user->id,  
+            'email'     =>  'required|email|unique:users,email,' . $user->id,  
             'phone'     =>  'required|numeric|digits_between:6,20', 
             'address'   =>  'max:255', 
             'profile_photo' => 'image|mimes:jpeg, png, jpg, gif, svg|max:2048'
@@ -333,9 +333,9 @@ class UserController extends Controller
     public function changePassword(Request $request, $user_id)
     {
         $validator = Validator::make($request->all(), [
-            'old_password' => 'required|min:8|regex:/^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/',
-            'password'     => 'required|min:8|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/',
-            'password_confirmation' => 'required|min:8|regex:/^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/',
+            'old_password' => 'required|min:8|regex:/^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/', 
+            'password'     => 'required|min:8|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/', 
+            'password_confirmation' => 'required|min:8|regex:/^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/'
         ]);
         if ($validator->fails()) {
             return redirect()->back()

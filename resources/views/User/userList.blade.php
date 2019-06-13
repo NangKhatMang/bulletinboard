@@ -2,37 +2,41 @@
 
 @section('content')
 <div id="userList">
+    <!-- success password change alert -->
     <div class="row">
         <div class="col-md-11 mx-auto">
             @if(Session::has('success-changPwd'))
                 <div class="alert alert-dismissible alert-success  alertmessage">
                     <strong>Success</strong>
-                    <p class="alert {{Session::get('alert-class','alert-success')}} ">{{ Session::get('success-changPwd')}}</p>
+                    <p class="alert {{Session::get('alert-class', 'alert-success')}} ">{{ Session::get('success-changPwd')}}</p>
                     <button class="close" type="button" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
             @endif
-        </div><!-- success password change alert -->
+        </div>
     </div>
+    <!-- success alert -->
     <div class="row">
         <div class="col-md-11 mx-auto">
             @if(Session::has('success'))
                 <div class="alert alert-dismissible alert-success  alertmessage">
                     <strong>Success</strong>
-                    <p class="alert {{Session::get('alert-class','alert-warning')}} ">{{ Session::get('success')}}</p>
+                    <p class="alert {{Session::get('alert-class', 'alert-warning')}} ">{{ Session::get('success')}}</p>
                     <button class="close" type="button" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
             @endif
-        </div><!-- success password change alert -->
+        </div>
     </div>
+    <!-- page title -->
     <div class="row mb-3">
         <div class="col">
             <h3>User List</h3>
         </div>
     </div>
+    <!-- user action -->
     <div class="row justify-content-center">
         <form action="/user/search" method="GET" class="form-inline">
             <input type="text" name="name" value="{{session('search_name')}}" class="form-control mb-4 mr-3" placeholder="Name">
@@ -42,10 +46,11 @@
             <button type="submit" class="btn btn-primary mb-4 mr-3">Search</button>
             <a href="/user/create" class="btn btn-primary mb-4 mr-3">Add</a>
         </form>
-        @if ($errors->has('email'))    
+        @if ($errors->has('email'))
             <div class="mb-4 text-danger">{{ $errors->first('email') }}</div>
         @endif
     </div>
+    <!-- user list -->
     <div class="row">
         <table class="table table-responsive-md table-striped table-bordered text-center col-md-11 mx-auto">
             <thead class="thead-dark">
@@ -80,9 +85,10 @@
                 @endforeach
             </tbody>
         </table>
+        <!-- pagination -->
         <ul class="pagination col-md-12 justify-content-center">
             {{$users->links()}}
-        </ul><!-- pagination -->
+        </ul>
     </div>
     <!-- User delete confirm Modal -->
     <div class="modal fade" id="deleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -109,5 +115,5 @@
             </div>
         </div>
     </div>
-</div><!-- /#userList -->
+</div>
 @endsection

@@ -2,40 +2,58 @@
 
 @section('content')
 <div id="postList">
+    <!-- success password change alert -->
     <div class="row">
         <div class="col-md-1"></div>
         <div class="col-md-11">
             @if(Session::has('success-changPwd'))
                 <div class="alert alert-dismissible alert-success  alertmessage">
                     <strong>Success</strong>
-                    <p class="alert {{Session::get('alert-class','alert-warning')}} ">{{ Session::get('success-changPwd')}}</p>
+                    <p class="alert {{Session::get('alert-class', 'alert-warning')}} ">{{ Session::get('success-changPwd')}}</p>
                     <button class="close" type="button" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
             @endif
-        </div><!-- success password change alert -->
+        </div>
     </div>
+    <!-- success alert -->
     <div class="row">
         <div class="col-md-1"></div>
         <div class="col-md-11">
             @if(!empty($success))
                 <div class="alert alert-dismissible alert-success  alertmessage">
                     <strong>Success</strong>
-                    <p class="alert {{Session::get('alert-class','alert-warning')}} ">{{$success}}</p>
+                    <p class="alert {{Session::get('alert-class', 'alert-warning')}} ">{{$success}}</p>
                     <button class="close" type="button" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
             @endif
-        </div><!-- success alert -->
+        </div>
     </div>
+    <!-- post delete success alert -->
+    <div class="row">
+        <div class="col-md-11 mx-auto">
+            @if(Session::has('success'))
+                <div class="alert alert-dismissible alert-success  alertmessage">
+                    <strong>Success</strong>
+                    <p class="alert {{Session::get('alert-class', 'alert-warning')}} ">{{ Session::get('success')}}</p>
+                    <button class="close" type="button" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+        </div>
+    </div>
+    <!-- page title -->
     <div class="row mb-3">
         <div class="col-md-1"></div>
         <div class="col-md-11">
             <h3>Post List</h3>
         </div>
     </div>
+    <!-- post action -->
     <div class="row justify-content-center">
         <form action="/posts/search" method="GET" class="form-inline">
             @csrf
@@ -48,6 +66,7 @@
             </div>
         </form>
     </div>
+    <!-- post list -->
     <div class="row">
         <table class="table table-responsive-md table-striped table-bordered text-center col-md-9 mx-auto">
             <thead class="thead-dark">
@@ -74,6 +93,7 @@
                 @endforeach
             </tbody>
         </table>
+        <!-- pagination -->
         <ul class="pagination col-md-12 justify-content-center">
             {{$posts->links()}}
         </ul>
@@ -124,5 +144,5 @@
             </div>
         </div>
     </div>
-</div><!-- /#postList -->
+</div>
 @endsection

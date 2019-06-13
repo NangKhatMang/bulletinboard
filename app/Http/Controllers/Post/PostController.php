@@ -65,8 +65,8 @@ class PostController extends Controller
     public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'title' =>  'required|max:255', 
-            'desc'  =>  'required|max:255'
+            'title' =>  'required|max:255|unique:posts,title', 
+            'desc'  =>  'required'
         ]);
         if ($validator->fails()) {
             return redirect()->back()
@@ -152,11 +152,12 @@ class PostController extends Controller
      */
     public function editConfirm(Request $request, $post_id)
     {
+        $post   =   Post::find($post_id);
         $title  =   $request->title;
         $desc   =   $request->desc;
         $validator  = Validator::make($request->all(), [
-            'title' =>  'required|max:255', 
-            'desc'  =>  'required|max:255'
+            'title' =>  'required|max:255|unique:posts,title,' . $post->id, 
+            'desc'  =>  'required'
         ]);
         if ($validator->fails()) {
             return redirect()->back()
@@ -195,7 +196,7 @@ class PostController extends Controller
         $post_id = $request->post_id;
         $auth_id = Auth::user()->id;
         $delete_post = $this->postService->softDelete($auth_id, $post_id);
-        return redirect()->intended('posts')->withSuccess('Post delete successfully.');
+        return redirect()->intended('posts')->with('success', 'Post delete successfully.');
     }
     /**
      * export excel file

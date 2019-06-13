@@ -18,7 +18,6 @@ class CreateTokensTable extends Migration
             $table->string('email');
             $table->string('token');
             $table->integer('created_user_id');
-            $table->timestamps();
         });
     }
 

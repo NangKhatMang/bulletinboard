@@ -2,12 +2,14 @@
 
 @section('content')
 <div id="userConfirm">
+    <!-- page title -->
     <div class="row mb-3">
         <div class="col-md-1"></div>
         <div class="col">
             <h3>Confirm User</h3>
         </div>
     </div>
+    <!-- user register confirmation -->
     <div class="row">
         <div class="col-md-8  mx-auto">
             <div class="text-center mb-4">
@@ -64,5 +66,5 @@
             </form>
         </div>
     </div>
-</div><!-- /#userConfirm -->
+</div>
 @endsection

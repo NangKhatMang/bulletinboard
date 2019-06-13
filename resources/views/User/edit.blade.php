@@ -2,6 +2,7 @@
 
 @section('content')
 <div id="userEdit">
+    <!-- page title -->
     <div class="row mb-3">
         <div class="col-md-1"></div>
         <div class="col">
@@ -15,6 +16,7 @@
                     <img width="100px" height="80px" src="{{$user_detail->profile}}" alt="User-profile" class="img-thumbnail">
                 </div>
             </div>
+            <!-- user update form -->
             <form action="/user/{{$user_detail->id}}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
@@ -22,8 +24,8 @@
                 <div class="form-group row">
                     <label for="name" class="col-md-4">Name</label>
                     <input type="text" id="name" name="user_name" class="form-control col-md-6"
-                        value="{{old('user_name',$user_detail->name)}}" >
-                    @if ($errors->has('user_name'))    
+                        value="{{old('user_name', $user_detail->name)}}" >
+                    @if ($errors->has('user_name'))
                         <div class="col-md-4"></div>
                         <div class="col-md-6 mt-1 text-danger">{{ $errors->first('user_name') }}</div>
                     @endif
@@ -31,8 +33,8 @@
                 <div class="form-group row">
                     <label for="email" class="col-md-4">Email Address</label>
                     <input type="text" id="email" name="email" class="form-control col-md-6"
-                        value="{{old('email',$user_detail->email)}}">
-                    @if ($errors->has('email'))    
+                        value="{{old('email', $user_detail->email)}}">
+                    @if ($errors->has('email'))
                         <div class="col-md-4"></div>
                         <div class="col-md-6 mt-1 text-danger">{{ $errors->first('email') }}</div>
                     @endif
@@ -42,18 +44,18 @@
                     <select name="type" id="type" class="col-md-6">
                         <option value="" disabled selected>-- Choose Authority --</option>
                         <option value="0"
-                            @if(old('type',$user_detail->type)=='0' ) {{"selected"}} @endif>Admin
+                            @if(old('type', $user_detail->type)=='0' ) {{"selected"}} @endif>Admin
                         </option>
                         <option value="1"
-                            @if(old('type',$user_detail->type)=='1' ) {{"selected"}} @endif>User
+                            @if(old('type', $user_detail->type)=='1' ) {{"selected"}} @endif>User
                         </option>
                     </select>
                 </div>
                 <div class="form-group row">
                     <label for="phone" class="col-md-4">Phone</label>
                     <input type="text" id="phone" name="phone" class="form-control col-md-6"
-                        value="{{old('phone',$user_detail->phone)}}">
-                    @if ($errors->has('phone'))    
+                        value="{{old('phone', $user_detail->phone)}}">
+                    @if ($errors->has('phone'))
                         <div class="col-md-4"></div>
                         <div class="col-md-6 mt-1 text-danger">{{ $errors->first('phone') }}</div>
                     @endif
@@ -61,12 +63,12 @@
                 <div class="form-group row">
                     <label for="dob" class="col-md-4">Date of Birth</label>
                     <input type="date" id="dob" name="dob" class="form-control col-md-6"
-                        value="{{old('dob',$user_detail->dob)}}">
+                        value="{{old('dob', $user_detail->dob)}}">
                 </div>
                 <div class="form-group row">
                     <label for="address" class="col-md-4">Address</label>
-                    <textarea name="address" id="address" class="form-control col-md-6">{{old('address',$user_detail->address)}}</textarea>
-                    @if ($errors->has('address'))    
+                    <textarea name="address" id="address" class="form-control col-md-6">{{old('address', $user_detail->address)}}</textarea>
+                    @if ($errors->has('address'))
                         <div class="col-md-4"></div>
                         <div class="col-md-6 mt-1 text-danger">{{ $errors->first('address') }}</div>
                     @endif
@@ -92,5 +94,5 @@
             </form>
         </div>
     </div>
-</div><!-- /#userEdit -->
+</div>
 @endsection

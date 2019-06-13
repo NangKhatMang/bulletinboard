@@ -2,12 +2,14 @@
 
 @section('content')
 <div id="userEditConfirm">
+    <!-- page title -->
     <div class="row mb-3">
         <div class="col-md-1"></div>
         <div class="col">
             <h3>User Update Confirmation</h3>
         </div>
     </div>
+    <!-- user update confirmation -->
     <div class="row">
         <div class="col-md-8 mx-auto">
             <div class="col-md-8  mx-auto">
@@ -61,5 +63,5 @@
             </form>
         </div>
     </div>
-</div><!-- /#userEditConfirm -->
+</div>
 @endsection

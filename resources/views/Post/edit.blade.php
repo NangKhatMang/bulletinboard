@@ -2,12 +2,14 @@
 
 @section('content')
 <div id="postEdit">
+    <!-- page title -->
     <div class="row mb-3">
         <div class="col-md-1"></div>
         <div class="col">
             <h3>Post Update</h3>
         </div>
     </div>
+    <!-- post Edit form -->
     <div class="row">
         <div class="col-md-8 mx-auto">
             <form action="/post/{{$post_detail->id}}" method="POST">
@@ -16,7 +18,7 @@
                 <div class="form-group">
                     <label for="title">Title</label>
                     <input type="text" id="title" name="title" class="form-control"
-                        value="{{old('title',$post_detail->title)}}">
+                        value="{{old('title', $post_detail->title)}}">
                     @if ($errors->has('title'))    
                         <label class="text-danger mt-2 mb-0">{{ $errors->first('title') }}</label>
                     @endif
@@ -43,5 +45,5 @@
             </form>
         </div>
     </div>
-</div><!-- /.postEdit -->
+</div>
 @endsection

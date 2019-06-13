@@ -3,19 +3,21 @@
 @section('content')
 <div id="login">
     <div class="row">
+        <!-- incorrect password alert-->
         <div class="col-md-8 mx-auto">
             @if(Session::has('incorrect'))
                 <div class="alert alert-dismissible alert-warning alertmessage text-danger">
                     <strong>Incorrect Password!</strong>
-                    <p class="alert {{Session::get('alert-class','alert-danger')}}">{{ Session::get('incorrect')}}</p>
+                    <p class="alert {{Session::get('alert-class', 'alert-danger')}}">{{ Session::get('incorrect')}}</p>
                     <button class="close" type="button" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
             @endif
-        </div><!-- incorrect password alert-->
+        </div>
     </div>
     <div class="row">
+        <!-- login form -->
         <form action="/user/login" method="POST" class="col-md-8 mx-auto border border-primary">
         @csrf
             <div class="row bg-primary mb-5">
@@ -50,5 +52,5 @@
             </div>
         </form>
     </div>
-</div><!-- /#login -->
+</div>
 @endsection
