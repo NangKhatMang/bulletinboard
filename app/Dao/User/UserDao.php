@@ -124,8 +124,7 @@ class UserDao implements UserDaoInterface
    */
   public function userDetail($user_id)
   {
-    $user_detail = User::find($user_id);
-    return $user_detail;
+    return $user_detail = User::find($user_id);
   }
 
   /**

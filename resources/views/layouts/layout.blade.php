@@ -14,6 +14,7 @@
 </head>
 <body id="app">
     <div id="wrapper">
+        <!-- navigation -->
         <header>
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-5">
                 <div class="container">
@@ -42,7 +43,7 @@
                             <!-- nav right -->
                             <ul class="navbar-nav ">
                                 <li class="nav-item">
-                                    <p class="nav-link">{{Auth::user()->name}}</p>
+                                    <a class="nav-link">{{Auth::user()->name}}</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="/user/logout">Logout</a>
@@ -52,12 +53,12 @@
                     </div>
                 </div><!-- /.container -->
             </nav>
-        </header>
-        <div class="content">
+        </header><!-- navigation -->
+        <section class="content">
             <div class="container">
                 @yield('content')
-            </div><!-- /.container -->
-        </div><!-- /.content -->
+            </div>
+        </section><!-- /.content -->
     </div><!-- /.wrapper -->
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>

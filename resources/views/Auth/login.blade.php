@@ -23,7 +23,7 @@
             </div>
             <div class="form-group row">
                 <label for="email" class="col-md-4">Email</label>
-                <input type="text" name="email" id="email" class="form-control col-md-6">
+                <input type="text" name="email" id="email" value="{{old('email')}}" class="form-control col-md-6">
                 @if ($errors->has('email'))    
                     <div class="col-md-4"></div>
                     <div class="col-md-6 mt-1 text-danger">{{ $errors->first('email') }}</div>

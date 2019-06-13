@@ -14,9 +14,11 @@
 Route::get('/', function () {
     return view('Auth.login');
 });
+Auth::routes();
 //login
 Route::post('/user/login', 'User\UserController@login');
 Route::get('/user/logout','User\UserController@logout');
+
 Route::group(['middleware' => ['auth']], function () {
     //post list
     Route::get('/posts', 'Post\PostController@index');

@@ -54,7 +54,8 @@ class UserController extends Controller
             return redirect()->intended('/posts');
         } else {
             return redirect()->back()
-                        ->with('incorrect', 'Email and password incorrect!');
+                        ->with('incorrect', 'Email or password incorrect!')
+                        ->withInput();
         }
     }
 

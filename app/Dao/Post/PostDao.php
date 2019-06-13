@@ -31,8 +31,7 @@ class PostDao implements PostDaoInterface
    */
   public function postDetail($post_id)
   {
-    $post_detail = Post::find($post_id);
-    return $post_detail;
+    return $post_detail = Post::find($post_id);
   }
 
   /**
