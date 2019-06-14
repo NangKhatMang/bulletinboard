@@ -167,7 +167,7 @@ class UserController extends Controller
         }
         $user_type      =  $request->type;
         if ($user_type == null) {
-            $user_type  =  '1';
+            $user_type = '1';
         }
         $user           =  new User;
         $user->name     =  $request->user_name;
@@ -254,7 +254,7 @@ class UserController extends Controller
             'email'     =>  'required|email|unique:users,email,' . $user->id,  
             'phone'     =>  'required|numeric|digits_between:6,20', 
             'address'   =>  'max:255', 
-            'profile_photo' => 'image|mimes:jpeg, png, jpg, gif, svg|max:2048'
+            'profile_photo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
         if ($validator->fails()) {
             return redirect()->back()

@@ -69,7 +69,7 @@
     <!-- post list -->
     <div class="row">
         <table class="table table-responsive-md table-striped table-bordered text-center col-md-9 mx-auto">
-            <thead class="thead-dark">
+            <thead class="thead-dark text-nowrap">
                 <th>No.</th>
                 <th>Post Title</th>
                 <th>Post Description</th>
@@ -82,9 +82,9 @@
                 <tr>
                     <td>{{ $posts->firstItem() + $key }}</td>
                     <td><button class="btn btn-link postDetail" data-id="{{$post->id}}">{{$post->title}}</button></td>
-                    <td>{{$post->description}}</td>
+                    <td class="text-justify" style="word-wrap:break-word; max-width:400px;">{{$post->description}}</td>
                     <td>{{$post->user->name}}</td>
-                    <td>{{$post->created_at}}</td>
+                    <td>{{$post->created_at->format('d-m-y g:i A')}}</td>
                     <td><a href="/post/{{$post->id}}" class="btn btn-primary">Edit</a></td>
                     <td><a href="#deleteConfirmModal" class="btn btn-danger postDelete"
                            data-toggle="modal" data-id="{{$post->id}}">Delete</a>
@@ -110,7 +110,7 @@
                 </div>
                 <div class="modal-body">
                     <p class="font-italic text-sm" id="posted-date"></p>
-                    <div id="post-desc"></div>
+                    <div id="post-desc" style="word-wrap:break-word;"></div>
                     <p class="font-italic text-sm-right" id="posted-user"></p>
                 </div>
                 <div class="modal-footer">

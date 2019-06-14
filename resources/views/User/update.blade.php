@@ -46,7 +46,7 @@
                 </div>
                 <div class="form-group row">
                     <label class="col-md-4">Date of Birth</label>
-                    <label class="border border-dark p-2 col-md-6">{{$user->dob}}</label>
+                    <label class="border border-dark p-2 col-md-6">{{date('d-m-Y', strtotime($user->dob))}}</label>
                     <input type="hidden" name="dob" value="{{$user->dob}}">
                 </div>
                 <div class="form-group row">

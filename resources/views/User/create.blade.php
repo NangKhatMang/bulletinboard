@@ -71,7 +71,7 @@
                 </div>
                 <div class="form-group row">
                     <label for="address" class="col-md-4">Address</label>
-                    <textarea name="address" id="address" class="form-control col-md-6">{{old('address',session('address'))}}</textarea>
+                    <textarea name="address" id="address" class="form-control col-md-6">{{old('address', session('address'))}}</textarea>
                     @if ($errors->has('address'))    
                         <div class="col-md-4"></div>
                         <div class="col-md-6 mt-1 text-danger">{{ $errors->first('address') }}</div>

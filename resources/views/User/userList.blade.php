@@ -53,7 +53,7 @@
     <!-- user list -->
     <div class="row">
         <table class="table table-responsive-md table-striped table-bordered text-center col-md-11 mx-auto">
-            <thead class="thead-dark">
+            <thead class="thead-dark text-nowrap">
                 <th>No.</th>
                 <th>Name</th>
                 <th>Email</th>
@@ -73,10 +73,10 @@
                     <td>{{$user->email}}</td>
                     <td>{{$user->created_user_name}}</td>
                     <td>{{$user->phone}}</td>
-                    <td>{{$user->dob}}</td>
-                    <td>{{$user->address}}</td>
-                    <td>{{$user->created_at}}</td>
-                    <td>{{$user->updated_at}}</td>
+                    <td class="text-nowrap">{{date('d-m-Y', strtotime($user->dob))}}</td>
+                    <td class="text-justify" style="word-wrap:break-word; max-width:155px;">{{$user->address}}</td>
+                    <td>{{$user->created_at->format('d-m-y g:i A')}}</td>
+                    <td>{{$user->updated_at->format('d-m-y g:i A')}}</td>
                     <td><a href="/user/{{$user->id}}" class="btn btn-primary">Edit</a></td>
                     <td><a href="#deleteConfirmModal" class="btn btn-danger userDelete"
                             data-toggle="modal" data-id="{{$user->id}}">Delete</a>
