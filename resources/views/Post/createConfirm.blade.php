@@ -16,12 +16,12 @@
                 @csrf
                 <div class="form-group">
                     <label>Title</label>
-                    <label class="border border-dark col text-break">{{$title}}</label>
+                    <label class="border border-dark col">{{$title}}</label>
                     <input type="hidden" name="title" value="{{$title}}">
                 </div>
                 <div class="form-group">
                     <label class="">Description</label>
-                    <label class="border border-dark col text-break">{{$desc}}</label>
+                    <label class="border border-dark col">{{$desc}}</label>
                     <input type="hidden" name="desc" value="{{$desc}}">
                 </div>
                 <div class="form-group">

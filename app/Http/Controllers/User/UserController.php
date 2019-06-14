@@ -166,12 +166,15 @@ class UserController extends Controller
         } else {
             $profile    =  '';
         }
-        
+        $user_type      =  $request->type;
+        if ($user_type == null) {
+            $user_type = '1';
+        }
         $user           =  new User;
         $user->name     =  $request->user_name;
         $user->email    =  $request->email;
         $user->password =  Hash::make($request->password);
-        $user->type     =  $request->type;
+        $user->type     =  $user_type;
         $user->phone    =  $request->phone;
         $user->dob      =  $request->dob;
         $user->address  =  $request->address;

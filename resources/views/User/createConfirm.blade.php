@@ -37,8 +37,8 @@
                 </div>
                 <div class="form-group row">
                     <label class="col-md-4">Authority</label>
-                    @if ($type == 0) <label class="border border-dark p-2 col-md-6">Admin</label>
-                        @else <label class="border border-dark p-2 col-md-6">User</label>
+                    @if ($type == null || $type == 1) <label class="border border-dark p-2 col-md-6">User</label>
+                        @else <label class="border border-dark p-2 col-md-6">Admin</label>
                     @endif
                     <input type="hidden" name="type" value="{{$type}}">
                 </div>
