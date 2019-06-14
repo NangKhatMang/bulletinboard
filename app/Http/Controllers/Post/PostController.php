@@ -233,7 +233,6 @@ class PostController extends Controller
         $fileName = $file->getClientOriginalName();
         $file->move('upload', $fileName);
         $filepath = public_path() . '/upload/' . $fileName;
-
         $import_csv_file = $this->postService->import($auth_id, $filepath);
         return redirect()->intended('posts')->withSuccess('Csv file upload successfully.');
     }

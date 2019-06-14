@@ -124,7 +124,6 @@ class UserController extends Controller
         $dob     =  $request->dob;
         $address =  $request->address;
         $profile_img = $request->file('profileImg');
-
         //password show as ***
         $hide = "*";
         $pwd_hide = str_pad($hide, strlen($pwd), "*");
@@ -168,7 +167,7 @@ class UserController extends Controller
         }
         $user_type      =  $request->type;
         if ($user_type == null) {
-            $user_type = '1';
+            $user_type  =  '1';
         }
         $user           =  new User;
         $user->name     =  $request->user_name;
@@ -179,8 +178,6 @@ class UserController extends Controller
         $user->dob      =  $request->dob;
         $user->address  =  $request->address;
         $user->profile  =  $profile;
-        
-        
         $insert_user  =  $this->userService->store($auth_id, $user);
         return redirect()->intended('users')->with('success', 'User create successfully.');
     }
